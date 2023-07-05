@@ -1,7 +1,7 @@
 version: '3'
 services:
   nexus-oss:
-    image: "sonatype/nexus3:${NEXUS_VERSION}"
+    image: "klo2k/nexus3"
     ports:
       - "${NEXUS_PORT}:8081"
     volumes:
