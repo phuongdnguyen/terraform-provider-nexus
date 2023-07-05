@@ -1,8 +1,6 @@
 package repository
 
 import (
-	"strings"
-
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -13,14 +11,23 @@ var (
 			Schema: map[string]*schema.Schema{
 				"member_names": {
 					Description: "Member repositories names",
-					Elem: &schema.Schema{
-						Type: schema.TypeString,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"order": &schema.Schema{
+								Type:     schema.TypeInt,
+								Required: true,
+							},
+							"name": &schema.Schema{
+								Type:     schema.TypeString,
+								Required: true,
+							},
+						},
 					},
 					MinItems: 1,
 					Required: true,
-					Set: func(v interface{}) int {
-						return schema.HashString(strings.ToLower(v.(string)))
-					},
+					// Set: func(v interface{}) int {
+					// 	return schema.HashString(strings.ToLower(v.(string)))
+					// },
 					Type: schema.TypeSet,
 				},
 			},
@@ -35,15 +42,21 @@ var (
 			Schema: map[string]*schema.Schema{
 				"member_names": {
 					Description: "Member repositories names",
-					Elem: &schema.Schema{
-						Type: schema.TypeString,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"order": &schema.Schema{
+								Type:     schema.TypeInt,
+								Required: true,
+							},
+							"name": &schema.Schema{
+								Type:     schema.TypeString,
+								Required: true,
+							},
+						},
 					},
 					MinItems: 1,
 					Required: true,
-					Set: func(v interface{}) int {
-						return schema.HashString(strings.ToLower(v.(string)))
-					},
-					Type: schema.TypeSet,
+					Type:     schema.TypeSet,
 				},
 				"writable_member": {
 					Description: "Pro-only: This field is for the Group Deployment feature available in NXRM Pro.",
@@ -62,8 +75,17 @@ var (
 			Schema: map[string]*schema.Schema{
 				"member_names": {
 					Description: "Member repositories names",
-					Elem: &schema.Schema{
-						Type: schema.TypeString,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"order": {
+								Type:     schema.TypeInt,
+								Required: true,
+							},
+							"name": {
+								Type:     schema.TypeString,
+								Required: true,
+							},
+						},
 					},
 					Computed: true,
 					Type:     schema.TypeSet,
@@ -79,8 +101,17 @@ var (
 			Schema: map[string]*schema.Schema{
 				"member_names": {
 					Description: "Member repositories names",
-					Elem: &schema.Schema{
-						Type: schema.TypeString,
+					Elem: &schema.Resource{
+						Schema: map[string]*schema.Schema{
+							"order": {
+								Type:     schema.TypeInt,
+								Required: true,
+							},
+							"name": {
+								Type:     schema.TypeString,
+								Required: true,
+							},
+						},
 					},
 					Computed: true,
 					Type:     schema.TypeSet,

@@ -68,3 +68,13 @@ func ConvertStringSet(set *schema.Set) []string {
 
 	return s
 }
+
+const (
+	SortKey = "order"
+)
+
+func SortSliceByKey(s []interface{}, key string) {
+	sort.Slice(s, func(i, j int) bool {
+		return s[i].(map[string]interface{})[key].(int) < s[j].(map[string]interface{})[key].(int)
+	})
+}
