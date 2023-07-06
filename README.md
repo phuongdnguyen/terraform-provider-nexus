@@ -1,3 +1,5 @@
+<img src="assets/logo.png" alt="logo" width="auto" height="600" />
+
 # Terraform provider Nexus
 
 ![codeql workflow](https://github.com/datadrivers/terraform-provider-nexus/actions/workflows/codeql-analysis.yml/badge.svg)
@@ -111,7 +113,7 @@ SKIP_AZURE_TESTS=1 make testacc
 SKIP_PRO_TESTS=1 make testacc
 ```
 
-#### To debug the provider with [delve](https://github.com/go-delve/delve)
+#### Debug the provider with [delve](https://github.com/go-delve/delve)
 ```bash
  dlv exec --accept-multiclient --continue --headless ./terraform-provider-nexus -- -debuggable
  export TF_REATTACH_PROVIDERS=.....
