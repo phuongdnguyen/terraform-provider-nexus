@@ -31,7 +31,16 @@ data "nexus_repository_go_group" "go_public" {
 
 Read-Only:
 
-- `member_names` (Set of String)
+- `member_names` (Set of Object) (see [below for nested schema](#nestedobjatt--group--member_names))
+
+<a id="nestedobjatt--group--member_names"></a>
+### Nested Schema for `group.member_names`
+
+Read-Only:
+
+- `name` (String)
+- `order` (Number)
+
 
 
 <a id="nestedatt--storage"></a>

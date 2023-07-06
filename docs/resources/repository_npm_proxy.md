@@ -23,10 +23,8 @@ resource "nexus_repository_npm_proxy" "npmjs" {
     metadata_max_age = 1440
   }
 
-  negative_cache {
-    enabled = true
-    ttl     = 1440
-  }
+  negative_cache_enabled = true
+  negative_cache_ttl     = 1440
 
   http_client {
     blocked    = false
@@ -47,7 +45,8 @@ resource "nexus_repository_npm_proxy" "npmjs" {
 ### Optional
 
 - `cleanup` (Block List) Cleanup policies (see [below for nested schema](#nestedblock--cleanup))
-- `negative_cache` (Block List, Max: 1) Configuration of the negative cache handling (see [below for nested schema](#nestedblock--negative_cache))
+- `negative_cache_enabled` (Boolean) Configuration of the negative cache handling
+- `negative_cache_ttl` (Number) Configuration of the negative cache handling
 - `online` (Boolean) Whether this repository accepts incoming requests
 - `remove_non_cataloged` (Boolean) Remove non-catalogued versions from the npm package metadata.
 - `remove_quarantined` (Boolean) Remove quarantined versions from the npm package metadata.
@@ -130,15 +129,6 @@ Optional:
 Optional:
 
 - `policy_names` (Set of String) List of policy names
-
-
-<a id="nestedblock--negative_cache"></a>
-### Nested Schema for `negative_cache`
-
-Optional:
-
-- `enabled` (Boolean) Whether to cache responses for content not present in the proxied repository
-- `ttl` (Number) How long to cache the fact that a file was not found in the repository (in minutes)
 ## Import
 Import is supported using the following syntax:
 ```shell

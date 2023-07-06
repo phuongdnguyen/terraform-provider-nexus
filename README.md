@@ -137,4 +137,4 @@ make docs
 
 ## Author
 
-[Datadrivers GmbH](https://www.datadrivers.de)
+Alot of thanks go to [Datadrivers GmbH](https://www.datadrivers.de)

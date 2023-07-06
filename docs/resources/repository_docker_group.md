@@ -69,10 +69,14 @@ resource "nexus_repository_docker_group" "group" {
   }
 
   group {
-    member_names = [
-      nexus_repository_docker_hosted.internal.name,
-      nexus_repository_docker_proxy.dockerhub.name
-    ]
+    member_names {
+      name  = nexus_repository_docker_hosted.internal.name
+      order = 1
+    }
+    member_names {
+      name  = exus_repository_docker_proxy.dockerhub.name
+      order = 2
+    }
     writable_member = nexus_repository_docker_hosted.internal.name
   }
 
@@ -119,11 +123,20 @@ Optional:
 
 Required:
 
-- `member_names` (Set of String) Member repositories names
+- `member_names` (Block Set, Min: 1) Member repositories names (see [below for nested schema](#nestedblock--group--member_names))
 
 Optional:
 
 - `writable_member` (String) Pro-only: This field is for the Group Deployment feature available in NXRM Pro.
+
+<a id="nestedblock--group--member_names"></a>
+### Nested Schema for `group.member_names`
+
+Required:
+
+- `name` (String)
+- `order` (Number)
+
 
 
 <a id="nestedblock--storage"></a>

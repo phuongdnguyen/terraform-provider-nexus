@@ -26,9 +26,10 @@ resource "nexus_repository_yum_group" "group" {
   online = true
 
   group {
-    member_names = [
-      nexus_repository_yum_hosted.internal.name,
-    ]
+    member_names {
+      name  = nexus_repository_yum_hosted.internal.name
+      order = 1
+    }
   }
 
   storage {
@@ -60,7 +61,16 @@ resource "nexus_repository_yum_group" "group" {
 
 Required:
 
-- `member_names` (Set of String) Member repositories names
+- `member_names` (Block Set, Min: 1) Member repositories names (see [below for nested schema](#nestedblock--group--member_names))
+
+<a id="nestedblock--group--member_names"></a>
+### Nested Schema for `group.member_names`
+
+Required:
+
+- `name` (String)
+- `order` (Number)
+
 
 
 <a id="nestedblock--storage"></a>

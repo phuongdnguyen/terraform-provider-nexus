@@ -36,10 +36,8 @@ resource "nexus_repository_bower_proxy" "bower_io" {
     metadata_max_age = 1440
   }
 
-  negative_cache {
-    enabled = true
-    ttl     = 1440
-  }
+  negative_cache_enabled = true
+  negative_cache_ttl     = 1440
 
   http_client {
     blocked    = false
@@ -52,10 +50,14 @@ resource "nexus_repository_bower_group" "group" {
   online = true
 
   group {
-    member_names = [
-      nexus_repository_bower_hosted.internal.name,
-      nexus_repository_bower_proxy.bower_io.name,
-    ]
+    member_names {
+      name  = nexus_repository_bower_hosted.internal.name
+      order = 1
+    }
+    member_names {
+      name  = nexus_repository_bower_proxy.bower_io.name
+      order = 2
+    }
   }
 
   storage {
@@ -86,7 +88,16 @@ resource "nexus_repository_bower_group" "group" {
 
 Required:
 
-- `member_names` (Set of String) Member repositories names
+- `member_names` (Block Set, Min: 1) Member repositories names (see [below for nested schema](#nestedblock--group--member_names))
+
+<a id="nestedblock--group--member_names"></a>
+### Nested Schema for `group.member_names`
+
+Required:
+
+- `name` (String)
+- `order` (Number)
+
 
 
 <a id="nestedblock--storage"></a>
