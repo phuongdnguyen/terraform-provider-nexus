@@ -41,10 +41,11 @@ func getDockerGroupRepositoryFromResourceData(resourceData *schema.ResourceData)
 	dockerConfig := resourceData.Get("docker").([]interface{})[0].(map[string]interface{})
 	groupConfig := resourceData.Get("group").([]interface{})[0].(map[string]interface{})
 	groupMemberNames := []string{}
-	for _, name := range groupConfig["member_names"].(*schema.Set).List() {
-		groupMemberNames = append(groupMemberNames, name.(string))
+	l := groupConfig["member_names"].(*schema.Set).List()
+	tools.SortSliceByKey(l, tools.SortKey)
+	for _, member := range l {
+		groupMemberNames = append(groupMemberNames, member.(map[string]interface{})["name"].(string))
 	}
-
 	repo := repository.DockerGroupRepository{
 		Name:   resourceData.Get("name").(string),
 		Online: resourceData.Get("online").(bool),
@@ -92,7 +93,6 @@ func setDockerGroupRepositoryToResourceData(repo *repository.DockerGroupReposito
 	if err := resourceData.Set("storage", flattenStorage(&repo.Storage)); err != nil {
 		return err
 	}
-
 	if err := resourceData.Set("group", flattenGroupDeploy(&repo.Group)); err != nil {
 		return err
 	}
@@ -125,7 +125,6 @@ func resourceDockerGroupRepositoryRead(resourceData *schema.ResourceData, m inte
 		resourceData.SetId("")
 		return nil
 	}
-
 	return setDockerGroupRepositoryToResourceData(repo, resourceData)
 }
 

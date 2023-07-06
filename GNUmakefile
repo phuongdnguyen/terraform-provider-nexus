@@ -39,10 +39,13 @@ build: fmtcheck
 linux: fmtcheck
 	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 $(GOBUILD) -o terraform.d/plugins/linux_amd64/terraform-provider-nexus -v
 
-darwin: fmtcheck
+darwin-amd64: fmtcheck
 	CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 $(GOBUILD) -o terraform.d/plugins/darwin_amd64/terraform-provider-nexus -v
 
-darwin-build-install: fmtcheck
+darwin-arm64-build-install: fmtcheck
+	CGO_ENABLED=0 GOOS=darwin GOARCH=arm64 $(GOBUILD) -o terraform.d/plugins/darwin_arm64/terraform-provider-nexus -v
+
+darwin-amd64-build-install: fmtcheck
 	CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 $(GOBUILD) -o ~/.terraform.d/plugins/darwin_amd64/terraform-provider-nexus -v
 
 test: fmt

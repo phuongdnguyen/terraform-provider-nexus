@@ -5,6 +5,7 @@ import (
 	"github.com/datadrivers/go-nexus-client/nexus3/schema/repository"
 	"github.com/datadrivers/terraform-provider-nexus/internal/schema/common"
 	repositorySchema "github.com/datadrivers/terraform-provider-nexus/internal/schema/repository"
+	"github.com/datadrivers/terraform-provider-nexus/internal/tools"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -37,8 +38,10 @@ func getNugetGroupRepositoryFromResourceData(resourceData *schema.ResourceData) 
 	storageConfig := resourceData.Get("storage").([]interface{})[0].(map[string]interface{})
 	groupConfig := resourceData.Get("group").([]interface{})[0].(map[string]interface{})
 	groupMemberNames := []string{}
-	for _, name := range groupConfig["member_names"].(*schema.Set).List() {
-		groupMemberNames = append(groupMemberNames, name.(string))
+	l := groupConfig["member_names"].(*schema.Set).List()
+	tools.SortSliceByKey(l, tools.SortKey)
+	for _, member := range l {
+		groupMemberNames = append(groupMemberNames, member.(map[string]interface{})["name"].(string))
 	}
 
 	repo := repository.NugetGroupRepository{
