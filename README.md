@@ -15,6 +15,7 @@
   - [Author](#author)
 
 ## Introduction
+This repo is forked from https://github.com/datadrivers/terraform-provider-nexus.
 
 Terraform provider to configure Sonatype Nexus using its API.
 
@@ -108,6 +109,12 @@ or skipped tests:
 SKIP_S3_TESTS=1 make testacc
 SKIP_AZURE_TESTS=1 make testacc
 SKIP_PRO_TESTS=1 make testacc
+```
+
+#### To debug the provider with [delve](https://github.com/go-delve/delve)
+```bash
+ dlv exec --accept-multiclient --continue --headless ./terraform-provider-nexus -- -debuggable
+ export TF_REATTACH_PROVIDERS=.....
 ```
 
 #### To debug tests
