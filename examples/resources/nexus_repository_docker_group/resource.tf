@@ -59,10 +59,14 @@ resource "nexus_repository_docker_group" "group" {
   }
 
   group {
-    member_names = [
-      nexus_repository_docker_hosted.internal.name,
-      nexus_repository_docker_proxy.dockerhub.name
-    ]
+    member_names {
+      name  = nexus_repository_docker_hosted.internal.name
+      order = 1
+    }
+    member_names {
+      name  = exus_repository_docker_proxy.dockerhub.name
+      order = 2
+    }
     writable_member = nexus_repository_docker_hosted.internal.name
   }
 

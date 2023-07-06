@@ -16,9 +16,10 @@ resource "nexus_repository_raw_group" "group" {
   online = true
 
   group {
-    member_names = [
-      nexus_repository_raw_hosted.internal.name,
-    ]
+    member_names {
+      name  = nexus_repository_raw_hosted.internal.name
+      order = 1
+    }
   }
 
   storage {

@@ -13,10 +13,9 @@ resource "nexus_repository_p2_proxy" "eclipse" {
     metadata_max_age = 1440
   }
 
-  negative_cache {
-    enabled = true
-    ttl     = 1440
-  }
+  negative_cache_enabled = true
+  negative_cache_ttl     = 1440
+
 
   http_client {
     blocked    = false

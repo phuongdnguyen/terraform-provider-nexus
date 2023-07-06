@@ -27,10 +27,8 @@ resource "nexus_repository_nuget_proxy" "nuget_org" {
     metadata_max_age = 1440
   }
 
-  negative_cache {
-    enabled = true
-    ttl     = 1440
-  }
+  negative_cache_enabled = true
+  negative_cache_ttl     = 1440
 
   http_client {
     blocked    = false
@@ -43,10 +41,14 @@ resource "nexus_repository_nuget_group" "group" {
   online = true
 
   group {
-    member_names = [
-      nexus_repository_nuget_hosted.internal.name,
-      nexus_repository_nuget_proxy.nuget_org.name,
-    ]
+    member_names {
+      name  = nexus_repository_nuget_hosted.internal.name
+      order = 1
+    }
+    member_names {
+      name  = nexus_repository_nuget_proxy.nuget_org.name
+      order = 2
+    }
   }
 
   storage {
