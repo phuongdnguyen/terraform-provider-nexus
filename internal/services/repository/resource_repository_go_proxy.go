@@ -40,7 +40,16 @@ func ResourceRepositoryGoProxy() *schema.Resource {
 
 func getGoProxyRepositoryFromResourceData(resourceData *schema.ResourceData) repository.GoProxyRepository {
 	httpClientConfig := resourceData.Get("http_client").([]interface{})[0].(map[string]interface{})
-	negativeCacheConfig := resourceData.Get("negative_cache").([]interface{})[0].(map[string]interface{})
+	var negativeCacheConfig map[string]interface{}
+	r, existed := resourceData.GetOk("negative_cache")
+	if existed {
+		negativeCacheConfig = r.([]interface{})[0].(map[string]interface{})
+	} else {
+		negativeCacheConfig = map[string]interface{}{
+			"enabled": tools.NegativeCacheDefaultEnabled,
+			"ttl":     tools.NegativeCacheDefaultTTL,
+		}
+	}
 	proxyConfig := resourceData.Get("proxy").([]interface{})[0].(map[string]interface{})
 	storageConfig := resourceData.Get("storage").([]interface{})[0].(map[string]interface{})
 

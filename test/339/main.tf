@@ -1,3 +1,4 @@
+# https://github.com/datadrivers/terraform-provider-nexus/issues/339
 provider "nexus" {
   insecure = true
   password = "123123123"

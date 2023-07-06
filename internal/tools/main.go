@@ -70,7 +70,9 @@ func ConvertStringSet(set *schema.Set) []string {
 }
 
 const (
-	SortKey = "order"
+	SortKey                     = "order"
+	NegativeCacheDefaultEnabled = false
+	NegativeCacheDefaultTTL     = 1440
 )
 
 func SortSliceByKey(s []interface{}, key string) {

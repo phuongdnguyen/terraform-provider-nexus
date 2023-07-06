@@ -40,7 +40,23 @@ func ResourceRepositoryRawProxy() *schema.Resource {
 
 func getRawProxyRepositoryFromResourceData(resourceData *schema.ResourceData) repository.RawProxyRepository {
 	httpClientConfig := resourceData.Get("http_client").([]interface{})[0].(map[string]interface{})
-	negativeCacheConfig := resourceData.Get("negative_cache").([]interface{})[0].(map[string]interface{})
+	/** negative_cache is an option an attribute of TypeList, which can not set default value for its since it's a limitation
+	of terraform-plugin-sdk ref: https://github.com/hashicorp/terraform-plugin-sdk/issues/142
+	It requires resource block to be existed for default value if its Elem to have effect, eg :
+	negative_cache {}
+	Its absence will cause the provider to crash
+	**/
+	var negativeCacheConfig map[string]interface{}
+	r, existed := resourceData.GetOk("negative_cache")
+	if existed {
+		negativeCacheConfig = r.([]interface{})[0].(map[string]interface{})
+	} else {
+		negativeCacheConfig = map[string]interface{}{
+			"enabled": tools.NegativeCacheDefaultEnabled,
+			"ttl":     tools.NegativeCacheDefaultTTL,
+		}
+	}
+
 	proxyConfig := resourceData.Get("proxy").([]interface{})[0].(map[string]interface{})
 	storageConfig := resourceData.Get("storage").([]interface{})[0].(map[string]interface{})
 
