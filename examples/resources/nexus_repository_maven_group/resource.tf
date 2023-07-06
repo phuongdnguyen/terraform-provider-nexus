@@ -21,9 +21,10 @@ resource "nexus_repository_maven_group" "group" {
   online = true
 
   group {
-    member_names = [
-      nexus_repository_maven_hosted.releases.name,
-    ]
+    member_name {
+      name  = nexus_repository_maven_hosted.releases.name
+      order = 1
+    }
   }
 
   storage {

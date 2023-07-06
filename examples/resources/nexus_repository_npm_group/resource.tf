@@ -14,9 +14,10 @@ resource "nexus_repository_npm_group" "group" {
   online = true
 
   group {
-    member_names = [
-      nexus_repository_npm_hosted.internal.name,
-    ]
+    member_names {
+      name  = nexus_repository_npm_hosted.internal.name
+      order = 1
+    }
   }
 
   storage {
