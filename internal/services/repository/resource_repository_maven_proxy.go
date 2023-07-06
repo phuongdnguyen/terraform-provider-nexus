@@ -28,12 +28,13 @@ func ResourceRepositoryMavenProxy() *schema.Resource {
 			"name":   repositorySchema.ResourceName,
 			"online": repositorySchema.ResourceOnline,
 			// Proxy schemas
-			"cleanup":        repositorySchema.ResourceCleanup,
-			"http_client":    repositorySchema.ResourceHTTPClientWithPreemptiveAuth,
-			"negative_cache": repositorySchema.ResourceNegativeCache,
-			"proxy":          repositorySchema.ResourceProxy,
-			"routing_rule":   repositorySchema.ResourceRoutingRule,
-			"storage":        repositorySchema.ResourceStorage,
+			"cleanup":                repositorySchema.ResourceCleanup,
+			"http_client":            repositorySchema.ResourceHTTPClientWithPreemptiveAuth,
+			"negative_cache_enabled": repositorySchema.ResourceNegativeCacheEnabled,
+			"negative_cache_ttl":     repositorySchema.ResourceNegativeCacheTTL,
+			"proxy":                  repositorySchema.ResourceProxy,
+			"routing_rule":           repositorySchema.ResourceRoutingRule,
+			"storage":                repositorySchema.ResourceStorage,
 			// Maven proxy schemas
 			"maven": repositorySchema.ResourceMaven,
 		},
@@ -42,15 +43,11 @@ func ResourceRepositoryMavenProxy() *schema.Resource {
 
 func getMavenProxyRepositoryFromResourceData(resourceData *schema.ResourceData) repository.MavenProxyRepository {
 	httpClientConfig := resourceData.Get("http_client").([]interface{})[0].(map[string]interface{})
-	var negativeCacheConfig map[string]interface{}
-	r, existed := resourceData.GetOk("negative_cache")
-	if existed {
-		negativeCacheConfig = r.([]interface{})[0].(map[string]interface{})
-	} else {
-		negativeCacheConfig = map[string]interface{}{
-			"enabled": tools.NegativeCacheDefaultEnabled,
-			"ttl":     tools.NegativeCacheDefaultTTL,
-		}
+	negativeCacheEnabled := resourceData.Get("negative_cache_enabled").(bool)
+	negativeCacheTTL := resourceData.Get("negative_cache_ttl").(int)
+	negativeCacheConfig := map[string]interface{}{
+		"enabled": negativeCacheEnabled,
+		"ttl":     negativeCacheTTL,
 	}
 	proxyConfig := resourceData.Get("proxy").([]interface{})[0].(map[string]interface{})
 	storageConfig := resourceData.Get("storage").([]interface{})[0].(map[string]interface{})
@@ -155,7 +152,11 @@ func setMavenProxyRepositoryToResourceData(repo *repository.MavenProxyRepository
 		return err
 	}
 
-	if err := resourceData.Set("negative_cache", flattenNegativeCache(&repo.NegativeCache)); err != nil {
+	if err := resourceData.Set("negative_cache_enabled", repo.NegativeCache.Enabled); err != nil {
+		return err
+	}
+
+	if err := resourceData.Set("negative_cache_ttl", repo.NegativeCache.TTL); err != nil {
 		return err
 	}
 

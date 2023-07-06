@@ -28,6 +28,18 @@ var (
 			},
 		},
 	}
+	ResourceNegativeCacheEnabled = &schema.Schema{
+		Description: "Configuration of the negative cache handling",
+		Optional:    true,
+		Type:        schema.TypeBool,
+		Default:     tools.NegativeCacheDefaultEnabled,
+	}
+	ResourceNegativeCacheTTL = &schema.Schema{
+		Description: "Configuration of the negative cache handling",
+		Optional:    true,
+		Type:        schema.TypeInt,
+		Default:     tools.NegativeCacheDefaultTTL,
+	}
 	DataSourceNegativeCache = &schema.Schema{
 		Description: "Configuration of the negative cache handling",
 		Type:        schema.TypeList,
