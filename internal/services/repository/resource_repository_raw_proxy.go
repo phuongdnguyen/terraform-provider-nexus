@@ -28,19 +28,31 @@ func ResourceRepositoryRawProxy() *schema.Resource {
 			"name":   repositorySchema.ResourceName,
 			"online": repositorySchema.ResourceOnline,
 			// Proxy schemas
-			"cleanup":        repositorySchema.ResourceCleanup,
-			"http_client":    repositorySchema.ResourceHTTPClientWithPreemptiveAuth,
-			"negative_cache": repositorySchema.ResourceNegativeCache,
-			"proxy":          repositorySchema.ResourceProxy,
-			"routing_rule":   repositorySchema.ResourceRoutingRule,
-			"storage":        repositorySchema.ResourceStorage,
+			"cleanup":                repositorySchema.ResourceCleanup,
+			"http_client":            repositorySchema.ResourceHTTPClientWithPreemptiveAuth,
+			"negative_cache_enabled": repositorySchema.ResourceNegativeCacheEnabled,
+			"negative_cache_ttl":     repositorySchema.ResourceNegativeCacheTTL,
+			"proxy":                  repositorySchema.ResourceProxy,
+			"routing_rule":           repositorySchema.ResourceRoutingRule,
+			"storage":                repositorySchema.ResourceStorage,
 		},
 	}
 }
 
 func getRawProxyRepositoryFromResourceData(resourceData *schema.ResourceData) repository.RawProxyRepository {
 	httpClientConfig := resourceData.Get("http_client").([]interface{})[0].(map[string]interface{})
-	negativeCacheConfig := resourceData.Get("negative_cache").([]interface{})[0].(map[string]interface{})
+	/** negative_cache is an option an attribute of TypeList, which can not set default value for its since it's a limitation
+	of terraform-plugin-sdk ref: https://github.com/hashicorp/terraform-plugin-sdk/issues/142
+	It requires resource block to be existed for default value if its Elem to have effect, eg :
+	negative_cache {}
+	Its absence will cause the provider to crash
+	**/
+	negativeCacheEnabled := resourceData.Get("negative_cache_enabled").(bool)
+	negativeCacheTTL := resourceData.Get("negative_cache_ttl").(int)
+	negativeCacheConfig := map[string]interface{}{
+		"enabled": negativeCacheEnabled,
+		"ttl":     negativeCacheTTL,
+	}
 	proxyConfig := resourceData.Get("proxy").([]interface{})[0].(map[string]interface{})
 	storageConfig := resourceData.Get("storage").([]interface{})[0].(map[string]interface{})
 
@@ -124,8 +136,11 @@ func setRawProxyRepositoryToResourceData(repo *repository.RawProxyRepository, re
 	if err := resourceData.Set("http_client", flattenHTTPClient(&repo.HTTPClient, resourceData)); err != nil {
 		return err
 	}
+	if err := resourceData.Set("negative_cache_enabled", repo.NegativeCache.Enabled); err != nil {
+		return err
+	}
 
-	if err := resourceData.Set("negative_cache", flattenNegativeCache(&repo.NegativeCache)); err != nil {
+	if err := resourceData.Set("negative_cache_ttl", repo.NegativeCache.TTL); err != nil {
 		return err
 	}
 

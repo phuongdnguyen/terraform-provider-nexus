@@ -32,12 +32,13 @@ func ResourceRepositoryDockerProxy() *schema.Resource {
 			"name":   repositorySchema.ResourceName,
 			"online": repositorySchema.ResourceOnline,
 			// Proxy schemas
-			"cleanup":        repositorySchema.ResourceCleanup,
-			"http_client":    repositorySchema.ResourceHTTPClient,
-			"negative_cache": repositorySchema.ResourceNegativeCache,
-			"proxy":          repositorySchema.ResourceProxy,
-			"routing_rule":   repositorySchema.ResourceRoutingRule,
-			"storage":        repositorySchema.ResourceStorage,
+			"cleanup":                repositorySchema.ResourceCleanup,
+			"http_client":            repositorySchema.ResourceHTTPClient,
+			"negative_cache_enabled": repositorySchema.ResourceNegativeCacheEnabled,
+			"negative_cache_ttl":     repositorySchema.ResourceNegativeCacheTTL,
+			"proxy":                  repositorySchema.ResourceProxy,
+			"routing_rule":           repositorySchema.ResourceRoutingRule,
+			"storage":                repositorySchema.ResourceStorage,
 			// Docker proxy schemas
 			"docker": repositorySchema.ResourceDocker,
 			"docker_proxy": {
@@ -68,7 +69,12 @@ func ResourceRepositoryDockerProxy() *schema.Resource {
 
 func getDockerProxyRepositoryFromResourceData(resourceData *schema.ResourceData) repository.DockerProxyRepository {
 	httpClientConfig := resourceData.Get("http_client").([]interface{})[0].(map[string]interface{})
-	negativeCacheConfig := resourceData.Get("negative_cache").([]interface{})[0].(map[string]interface{})
+	negativeCacheEnabled := resourceData.Get("negative_cache_enabled").(bool)
+	negativeCacheTTL := resourceData.Get("negative_cache_ttl").(int)
+	negativeCacheConfig := map[string]interface{}{
+		"enabled": negativeCacheEnabled,
+		"ttl":     negativeCacheTTL,
+	}
 	proxyConfig := resourceData.Get("proxy").([]interface{})[0].(map[string]interface{})
 	storageConfig := resourceData.Get("storage").([]interface{})[0].(map[string]interface{})
 	dockerConfig := resourceData.Get("docker").([]interface{})[0].(map[string]interface{})
@@ -186,7 +192,11 @@ func setDockerProxyRepositoryToResourceData(repo *repository.DockerProxyReposito
 		return err
 	}
 
-	if err := resourceData.Set("negative_cache", flattenNegativeCache(&repo.NegativeCache)); err != nil {
+	if err := resourceData.Set("negative_cache_enabled", repo.NegativeCache.Enabled); err != nil {
+		return err
+	}
+
+	if err := resourceData.Set("negative_cache_ttl", repo.NegativeCache.TTL); err != nil {
 		return err
 	}
 

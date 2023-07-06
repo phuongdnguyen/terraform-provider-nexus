@@ -177,18 +177,6 @@ func flattenHTTPClientConnection(conn *repository.HTTPClientConnection) []map[st
 	return []map[string]interface{}{data}
 }
 
-func flattenNegativeCache(negativeCache *repository.NegativeCache) []map[string]interface{} {
-	if negativeCache == nil {
-		return nil
-	}
-	return []map[string]interface{}{
-		{
-			"enabled": negativeCache.Enabled,
-			"ttl":     negativeCache.TTL,
-		},
-	}
-}
-
 func flattenProxy(proxy *repository.Proxy) []map[string]interface{} {
 	if proxy == nil {
 		return nil
