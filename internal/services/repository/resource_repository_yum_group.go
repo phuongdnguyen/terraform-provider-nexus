@@ -1,6 +1,8 @@
 package repository
 
 import (
+	"reflect"
+
 	nexus "github.com/datadrivers/go-nexus-client/nexus3"
 	"github.com/datadrivers/go-nexus-client/nexus3/schema/repository"
 	"github.com/datadrivers/terraform-provider-nexus/internal/schema/common"
@@ -123,7 +125,13 @@ func resourceYumGroupRepositoryUpdate(resourceData *schema.ResourceData, m inter
 
 	repoName := resourceData.Id()
 	repo := getYumGroupRepositoryFromResourceData(resourceData)
-
+	repo1, err := client.Repository.Yum.Group.Get(resourceData.Id())
+	if err != nil {
+		return err
+	}
+	if reflect.DeepEqual(repo1.Group.MemberNames, repo.Group.MemberNames) {
+		return nil
+	}
 	if err := client.Repository.Yum.Group.Update(repoName, repo); err != nil {
 		return err
 	}

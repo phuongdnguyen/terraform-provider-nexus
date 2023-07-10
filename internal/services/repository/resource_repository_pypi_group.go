@@ -1,6 +1,8 @@
 package repository
 
 import (
+	"reflect"
+
 	nexus "github.com/datadrivers/go-nexus-client/nexus3"
 	"github.com/datadrivers/go-nexus-client/nexus3/schema/repository"
 	"github.com/datadrivers/terraform-provider-nexus/internal/schema/common"
@@ -109,7 +111,13 @@ func resourcePypiGroupRepositoryUpdate(resourceData *schema.ResourceData, m inte
 
 	repoName := resourceData.Id()
 	repo := getPypiGroupRepositoryFromResourceData(resourceData)
-
+	repo1, err := client.Repository.Pypi.Group.Get(resourceData.Id())
+	if err != nil {
+		return err
+	}
+	if reflect.DeepEqual(repo1.Group.MemberNames, repo.Group.MemberNames) {
+		return nil
+	}
 	if err := client.Repository.Pypi.Group.Update(repoName, repo); err != nil {
 		return err
 	}
