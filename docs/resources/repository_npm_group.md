@@ -47,7 +47,7 @@ resource "nexus_repository_npm_group" "group" {
 
 ### Optional
 
-- `online` (Boolean) Whether this repository accepts incoming requests
+- `online` (Boolean) Whether this repository accepts incoming requests, defaults to `true` if unset
 
 ### Read-Only
 
@@ -83,7 +83,7 @@ Required:
 
 Optional:
 
-- `strict_content_type_validation` (Boolean) Whether to validate uploaded content's MIME type appropriate for the repository format
+- `strict_content_type_validation` (Boolean) Whether to validate uploaded content's MIME type appropriate for the repository format, defaults to `true` if unset
 ## Import
 Import is supported using the following syntax:
 ```shell

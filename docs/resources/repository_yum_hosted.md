@@ -41,9 +41,9 @@ resource "nexus_repository_yum_hosted" "yum1" {
 
 - `cleanup` (Block List) Cleanup policies (see [below for nested schema](#nestedblock--cleanup))
 - `component` (Block List, Max: 1) Component configuration for the hosted repository (see [below for nested schema](#nestedblock--component))
-- `deploy_policy` (String) Validate that all paths are RPMs or yum metadata. Possible values: `STRICT` or `PERMISSIVE`
-- `online` (Boolean) Whether this repository accepts incoming requests
-- `repodata_depth` (Number) Specifies the repository depth where repodata folder(s) are created. Possible values: 0-5
+- `deploy_policy` (String) Validate that all paths are RPMs or yum metadata. Possible values: `STRICT` or `PERMISSIVE`, defaults to `STRICT` if unset
+- `online` (Boolean) Whether this repository accepts incoming requests, defaults to `true` if unset
+- `repodata_depth` (Number) Specifies the repository depth where repodata folder(s) are created. Possible values: 0-5, defaults to `0` if unset
 
 ### Read-Only
 

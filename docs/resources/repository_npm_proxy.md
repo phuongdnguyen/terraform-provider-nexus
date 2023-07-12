@@ -45,11 +45,11 @@ resource "nexus_repository_npm_proxy" "npmjs" {
 ### Optional
 
 - `cleanup` (Block List) Cleanup policies (see [below for nested schema](#nestedblock--cleanup))
-- `negative_cache_enabled` (Boolean) Configuration of the negative cache handling
-- `negative_cache_ttl` (Number) Configuration of the negative cache handling
-- `online` (Boolean) Whether this repository accepts incoming requests
-- `remove_non_cataloged` (Boolean) Remove non-catalogued versions from the npm package metadata.
-- `remove_quarantined` (Boolean) Remove quarantined versions from the npm package metadata.
+- `negative_cache_enabled` (Boolean) Configuration of the negative cache handling, defaults to `false` if unset
+- `negative_cache_ttl` (Number) Configuration of the negative cache handling, defaults is `1440` if unset
+- `online` (Boolean) Whether this repository accepts incoming requests, defaults to `true` if unset
+- `remove_non_cataloged` (Boolean) Remove non-catalogued versions from the npm package metadata, defaults to `false` if unset
+- `remove_quarantined` (Boolean) Remove quarantined versions from the npm package metadata, defaults to `false` if unset
 - `routing_rule` (String) The name of the routing rule assigned to this repository
 
 ### Read-Only
@@ -89,12 +89,12 @@ Optional:
 
 Optional:
 
-- `enable_circular_redirects` (Boolean) Whether to enable redirects to the same location (may be required by some servers)
-- `enable_cookies` (Boolean) Whether to allow cookies to be stored and used
-- `retries` (Number) Total retries if the initial connection attempt suffers a timeout
+- `enable_circular_redirects` (Boolean) Whether to enable redirects to the same location (may be required by some servers), defaults to `false` if unset
+- `enable_cookies` (Boolean) Whether to allow cookies to be stored and used, defaults to `false` if unset
+- `retries` (Number) Total retries if the initial connection attempt suffers a timeout, defaults to `0` if unset
 - `timeout` (Number) Seconds to wait for activity before stopping and retrying the connection
-- `use_trust_store` (Boolean) Use certificates stored in the Nexus Repository Manager truststore to connect to external systems
-- `user_agent_suffix` (String) Custom fragment to append to User-Agent header in HTTP requests
+- `use_trust_store` (Boolean) Use certificates stored in the Nexus Repository Manager truststore to connect to external systems, defaults to `false` if unset
+- `user_agent_suffix` (String) Custom fragment to append to User-Agent header in HTTP requests, defaults to `false` if unset
 
 
 
@@ -107,8 +107,8 @@ Required:
 
 Optional:
 
-- `content_max_age` (Number) How long (in minutes) to cache artifacts before rechecking the remote repository
-- `metadata_max_age` (Number) How long (in minutes) to cache metadata before rechecking the remote repository.
+- `content_max_age` (Number) How long (in minutes) to cache artifacts before rechecking the remote repository, defaults to `1440` if unset
+- `metadata_max_age` (Number) How long (in minutes) to cache metadata before rechecking the remote repository, defaults to `1440` if unset
 
 
 <a id="nestedblock--storage"></a>
@@ -120,7 +120,7 @@ Required:
 
 Optional:
 
-- `strict_content_type_validation` (Boolean) Whether to validate uploaded content's MIME type appropriate for the repository format
+- `strict_content_type_validation` (Boolean) Whether to validate uploaded content's MIME type appropriate for the repository format, defaults to `true` if unset
 
 
 <a id="nestedblock--cleanup"></a>

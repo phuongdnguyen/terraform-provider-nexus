@@ -49,7 +49,7 @@ resource "nexus_repository_yum_group" "group" {
 
 ### Optional
 
-- `online` (Boolean) Whether this repository accepts incoming requests
+- `online` (Boolean) Whether this repository accepts incoming requests, defaults to `true` if unset
 - `yum_signing` (Block List, Max: 1) Contains signing data of repositores (see [below for nested schema](#nestedblock--yum_signing))
 
 ### Read-Only
@@ -82,7 +82,7 @@ Required:
 
 Optional:
 
-- `strict_content_type_validation` (Boolean) Whether to validate uploaded content's MIME type appropriate for the repository format
+- `strict_content_type_validation` (Boolean) Whether to validate uploaded content's MIME type appropriate for the repository format, defaults to `true` if unset
 
 
 <a id="nestedblock--yum_signing"></a>

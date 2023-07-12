@@ -47,7 +47,7 @@ func ResourceBlobstoreS3() *schema.Resource {
 									},
 									"force_path_style": {
 										Default:     false,
-										Description: "Setting this flag will result in path-style access being used for all requests.",
+										Description: "Setting this flag will result in path-style access being used for all requests, defaults to `false` if unset",
 										Optional:    true,
 										Type:        schema.TypeBool,
 									},

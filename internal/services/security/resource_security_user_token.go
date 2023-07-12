@@ -29,7 +29,7 @@ Use this resource to manage the global configuration for the user-tokens.`,
 				Required:    true,
 			},
 			"protect_content": {
-				Description: "Require user tokens for repository authentication. This does not effect UI access.",
+				Description: "Require user tokens for repository authentication. This does not effect UI access, defaults to `false` if unset",
 				Type:        schema.TypeBool,
 				Optional:    true,
 				Default:     false,

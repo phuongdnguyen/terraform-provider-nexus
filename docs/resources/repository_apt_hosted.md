@@ -39,7 +39,7 @@ resource "nexus_repository_apt_hosted" "bullseye_stable" {
 
 - `cleanup` (Block List) Cleanup policies (see [below for nested schema](#nestedblock--cleanup))
 - `component` (Block List, Max: 1) Component configuration for the hosted repository (see [below for nested schema](#nestedblock--component))
-- `online` (Boolean) Whether this repository accepts incoming requests
+- `online` (Boolean) Whether this repository accepts incoming requests, defaults to `true` if unset
 
 ### Read-Only
 

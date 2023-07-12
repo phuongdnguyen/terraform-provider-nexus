@@ -25,7 +25,7 @@ resource "nexus_security_user_token" "nexus" {
 
 ### Optional
 
-- `protect_content` (Boolean) Require user tokens for repository authentication. This does not effect UI access.
+- `protect_content` (Boolean) Require user tokens for repository authentication. This does not effect UI access, defaults to `false` if unset
 
 ### Read-Only
 

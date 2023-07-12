@@ -80,7 +80,7 @@ Optional:
 Optional:
 
 - `endpoint` (String) A custom endpoint URL for third party object stores using the S3 API.
-- `force_path_style` (Boolean) Setting this flag will result in path-style access being used for all requests.
+- `force_path_style` (Boolean) Setting this flag will result in path-style access being used for all requests, defaults to `false` if unset
 - `max_connection_pool_size` (Number) Setting this value will override the default connection pool size of Nexus of the s3 client for this blobstore.
 - `signer_type` (String) An API signature version which may be required for third party object stores using the S3 API.
 

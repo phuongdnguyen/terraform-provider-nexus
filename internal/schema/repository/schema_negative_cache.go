@@ -15,13 +15,13 @@ var (
 			Schema: map[string]*schema.Schema{
 				"enabled": {
 					Default:     tools.NegativeCacheDefaultEnabled,
-					Description: "Whether to cache responses for content not present in the proxied repository",
+					Description: "Whether to cache responses for content not present in the proxied repository, defaults to `false` if unset",
 					Optional:    true,
 					Type:        schema.TypeBool,
 				},
 				"ttl": {
 					Default:     tools.NegativeCacheDefaultTTL,
-					Description: "How long to cache the fact that a file was not found in the repository (in minutes)",
+					Description: "How long to cache the fact that a file was not found in the repository (in minutes), defaults is `1440` if unset",
 					Optional:    true,
 					Type:        schema.TypeInt,
 				},
@@ -29,13 +29,13 @@ var (
 		},
 	}
 	ResourceNegativeCacheEnabled = &schema.Schema{
-		Description: "Configuration of the negative cache handling",
+		Description: "Configuration of the negative cache handling, defaults to `false` if unset",
 		Optional:    true,
 		Type:        schema.TypeBool,
 		Default:     tools.NegativeCacheDefaultEnabled,
 	}
 	ResourceNegativeCacheTTL = &schema.Schema{
-		Description: "Configuration of the negative cache handling",
+		Description: "Configuration of the negative cache handling, defaults is `1440` if unset",
 		Optional:    true,
 		Type:        schema.TypeInt,
 		Default:     tools.NegativeCacheDefaultTTL,

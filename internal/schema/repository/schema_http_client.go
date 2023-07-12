@@ -65,19 +65,19 @@ var (
 		Elem: &schema.Resource{
 			Schema: map[string]*schema.Schema{
 				"enable_circular_redirects": {
-					Description: "Whether to enable redirects to the same location (may be required by some servers)",
+					Description: "Whether to enable redirects to the same location (may be required by some servers), defaults to `false` if unset",
 					Optional:    true,
 					Type:        schema.TypeBool,
 					Default:     false,
 				},
 				"enable_cookies": {
-					Description: "Whether to allow cookies to be stored and used",
+					Description: "Whether to allow cookies to be stored and used, defaults to `false` if unset",
 					Optional:    true,
 					Type:        schema.TypeBool,
 					Default:     false,
 				},
 				"retries": {
-					Description:      "Total retries if the initial connection attempt suffers a timeout",
+					Description:      "Total retries if the initial connection attempt suffers a timeout, defaults to `0` if unset",
 					Optional:         true,
 					Type:             schema.TypeInt,
 					Default:          0,
@@ -109,13 +109,13 @@ var (
 					// ValidateDiagFunc: validation.ToDiagFunc(validation.IntBetween(1, 3600)),
 				},
 				"user_agent_suffix": {
-					Description: "Custom fragment to append to User-Agent header in HTTP requests",
+					Description: "Custom fragment to append to User-Agent header in HTTP requests, defaults to `false` if unset",
 					Optional:    true,
 					Type:        schema.TypeString,
 					Default:     false,
 				},
 				"use_trust_store": {
-					Description: "Use certificates stored in the Nexus Repository Manager truststore to connect to external systems",
+					Description: "Use certificates stored in the Nexus Repository Manager truststore to connect to external systems, defaults to `false` if unset",
 					Optional:    true,
 					Type:        schema.TypeBool,
 					Default:     false,
@@ -197,7 +197,7 @@ var (
 					Type:        schema.TypeString,
 				},
 				"preemptive": {
-					Description: "Whether to use pre-emptive authentication. Use with caution. Defaults to false.",
+					Description: "Whether to use pre-emptive authentication. Use with caution, defaults to `false` if unset",
 					Optional:    true,
 					Type:        schema.TypeBool,
 				},

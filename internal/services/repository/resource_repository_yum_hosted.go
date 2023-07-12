@@ -35,14 +35,14 @@ func ResourceRepositoryYumHosted() *schema.Resource {
 			// Yum hosted schemas
 			"deploy_policy": {
 				Default:      "STRICT",
-				Description:  "Validate that all paths are RPMs or yum metadata. Possible values: `STRICT` or `PERMISSIVE`",
+				Description:  "Validate that all paths are RPMs or yum metadata. Possible values: `STRICT` or `PERMISSIVE`, defaults to `STRICT` if unset",
 				Optional:     true,
 				Type:         schema.TypeString,
 				ValidateFunc: validation.StringInSlice([]string{string(repository.YumDeployPolicyStrict), string(repository.YumDeployPolicyPermissive)}, false),
 			},
 			"repodata_depth": {
 				Default:      0,
-				Description:  "Specifies the repository depth where repodata folder(s) are created. Possible values: 0-5",
+				Description:  "Specifies the repository depth where repodata folder(s) are created. Possible values: 0-5, defaults to `0` if unset",
 				Optional:     true,
 				Type:         schema.TypeInt,
 				ValidateFunc: validation.IntBetween(0, 5),

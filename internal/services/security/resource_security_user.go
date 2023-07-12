@@ -59,7 +59,7 @@ func ResourceSecurityUser() *schema.Resource {
 			},
 			"status": {
 				Default:     "active",
-				Description: "The user's status, e.g. active or disabled.",
+				Description: "The user's status, e.g. active or disabled, defaults to `active` if unset",
 				Type:        schema.TypeString,
 				Optional:    true,
 				ValidateFunc: validation.StringInSlice([]string{

@@ -24,19 +24,19 @@ Use this resource to change the anonymous configuration of the nexus repository 
 		Schema: map[string]*schema.Schema{
 			"id": common.ResourceID,
 			"enabled": {
-				Description: "Activate the anonymous access to the repository manager. Default: false",
+				Description: "Activate the anonymous access to the repository manager, defaults to `false`  if unset",
 				Type:        schema.TypeBool,
 				Optional:    true,
 				Default:     false,
 			},
 			"user_id": {
-				Description: "The user id used by anonymous access. Default: \"anonymous\"",
+				Description: "The user id used by anonymous access, defaults to `anonymous` if unset",
 				Type:        schema.TypeString,
 				Optional:    true,
 				Default:     "anonymous",
 			},
 			"realm_name": {
-				Description: "The name of the used realm. Default: \"NexusAuthorizingRealm\"",
+				Description: "The name of the used realm, defaults to `NexusAuthorizingRealm`  if unset",
 				Type:        schema.TypeString,
 				Optional:    true,
 				Default:     "NexusAuthorizingRealm",

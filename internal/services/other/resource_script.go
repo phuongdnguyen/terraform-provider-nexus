@@ -33,7 +33,7 @@ func ResourceScript() *schema.Resource {
 				Type:        schema.TypeString,
 			},
 			"type": {
-				Description: "The type of the script. Default: `groovy`",
+				Description: "The type of the script, defaults to `groovy` if unset",
 				Optional:    true,
 				Type:        schema.TypeString,
 				Default:     "groovy",
