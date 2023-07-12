@@ -25,7 +25,7 @@ var (
 				},
 				"strict_content_type_validation": {
 					Default:     true,
-					Description: "Whether to validate uploaded content's MIME type appropriate for the repository format",
+					Description: "Whether to validate uploaded content's MIME type appropriate for the repository format, defaults to `true` if unset",
 					Optional:    true,
 					Type:        schema.TypeBool,
 				},

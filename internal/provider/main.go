@@ -143,26 +143,26 @@ func Provider() *schema.Provider {
 		},
 		Schema: map[string]*schema.Schema{
 			"insecure": {
-				Description: "Boolean to specify wether insecure SSL connections are allowed or not. Reading environment variable NEXUS_INSECURE_SKIP_VERIFY. Default:`true`",
+				Description: "Boolean to specify wether insecure SSL connections are allowed or not. Reading environment variable NEXUS_INSECURE_SKIP_VERIFY, defaults to `true` if unset",
 				Default:     false,
 				DefaultFunc: schema.EnvDefaultFunc("NEXUS_INSECURE_SKIP_VERIFY", "true"),
 				Optional:    true,
 				Type:        schema.TypeBool,
 			},
 			"password": {
-				Description: "Password of user to connect to API. Reading environment variable NEXUS_PASSWORD. Default:`admin123`",
+				Description: "Password of user to connect to API. Reading environment variable NEXUS_PASSWORD, defaults to `admin123` if unset",
 				DefaultFunc: schema.EnvDefaultFunc("NEXUS_PASSWORD", "admin123"),
 				Required:    true,
 				Type:        schema.TypeString,
 			},
 			"url": {
-				Description: "URL of Nexus to reach API. Reading environment variable NEXUS_URL. Default:`http://127.0.0.1:8080`",
+				Description: "URL of Nexus to reach API. Reading environment variable NEXUS_URL, defaults to :`http://127.0.0.1:8080`  if unset",
 				DefaultFunc: schema.EnvDefaultFunc("NEXUS_URL", "http://127.0.0.1:8080"),
 				Required:    true,
 				Type:        schema.TypeString,
 			},
 			"username": {
-				Description: "Username used to connect to API. Reading environment variable NEXUS_USERNAME. Default:`admin`",
+				Description: "Username used to connect to API. Reading environment variable NEXUS_USERNAME, defaults to `admin` if unset",
 				DefaultFunc: schema.EnvDefaultFunc("NEXUS_USERNAME", "admin"),
 				Required:    true,
 				Type:        schema.TypeString,

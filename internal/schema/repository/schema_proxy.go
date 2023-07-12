@@ -13,13 +13,13 @@ var (
 		Elem: &schema.Resource{
 			Schema: map[string]*schema.Schema{
 				"content_max_age": {
-					Description: "How long (in minutes) to cache artifacts before rechecking the remote repository",
+					Description: "How long (in minutes) to cache artifacts before rechecking the remote repository, defaults to `1440` if unset",
 					Type:        schema.TypeInt,
 					Optional:    true,
 					Default:     1440,
 				},
 				"metadata_max_age": {
-					Description: "How long (in minutes) to cache metadata before rechecking the remote repository.",
+					Description: "How long (in minutes) to cache metadata before rechecking the remote repository, defaults to `1440` if unset",
 					Type:        schema.TypeInt,
 					Optional:    true,
 					Default:     1440,

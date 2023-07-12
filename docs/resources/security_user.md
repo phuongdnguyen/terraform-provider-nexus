@@ -32,7 +32,7 @@ resource "nexus_security_user" "admin" {
 ### Optional
 
 - `roles` (Set of String) The roles which the user has been assigned within Nexus.
-- `status` (String) The user's status, e.g. active or disabled.
+- `status` (String) The user's status, e.g. active or disabled, defaults to `active` if unset
 
 ### Read-Only
 

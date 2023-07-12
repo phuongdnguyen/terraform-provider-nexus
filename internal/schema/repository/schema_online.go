@@ -7,7 +7,7 @@ import (
 var (
 	ResourceOnline = &schema.Schema{
 		Default:     true,
-		Description: "Whether this repository accepts incoming requests",
+		Description: "Whether this repository accepts incoming requests, defaults to `true` if unset",
 		Optional:    true,
 		Type:        schema.TypeBool,
 	}
