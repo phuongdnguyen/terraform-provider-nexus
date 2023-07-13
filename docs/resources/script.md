@@ -24,7 +24,7 @@ resource "nexus_script" "repo_pypi_internal" {
 
 ### Optional
 
-- `type` (String) The type of the script. Default: `groovy`
+- `type` (String) The type of the script, defaults to `groovy` if unset
 
 ### Read-Only
 

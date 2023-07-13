@@ -14,7 +14,7 @@ Use this resource to create a Nexus privilege.
 
 - `actions` (Set of String) Actions for the privilege (browse, read, edit, add, delete, all and run)
 - `name` (String) The name of the privilege
-- `type` (String) The type of the privilege. Possible values: `application`, `repository-admin`, `repository-content-selector`, `repository-view`, `script`, `wildcard`
+- `privilege_type` (String) The type of the privilege. Possible values: `application`, `repository-admin`, `repository-content-selector`, `repository-view`, `script`, `wildcard`
 
 ### Optional
 

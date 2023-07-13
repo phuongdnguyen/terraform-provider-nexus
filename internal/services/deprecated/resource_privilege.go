@@ -62,7 +62,7 @@ func ResourcePrivilege() *schema.Resource {
 				Optional:    true,
 				Type:        schema.TypeString,
 			},
-			"type": {
+			"privilege_type": {
 				Description:  "The type of the privilege. Possible values: `application`, `repository-admin`, `repository-content-selector`, `repository-view`, `script`, `wildcard`",
 				Required:     true,
 				Type:         schema.TypeString,
@@ -86,7 +86,7 @@ func getPrivilegeFromResourceData(d *schema.ResourceData) security.Privilege {
 	privilege := security.Privilege{
 		Actions: tools.InterfaceSliceToStringSlice(d.Get("actions").(*schema.Set).List()),
 		Name:    d.Get("name").(string),
-		Type:    d.Get("type").(string),
+		Type:    d.Get("privilege_type").(string),
 	}
 
 	if description, ok := d.GetOk("description"); ok {
@@ -129,7 +129,7 @@ func setPrivilegeToResourceData(privilege *security.Privilege, d *schema.Resourc
 	d.Set("format", privilege.Format)
 	d.Set("name", privilege.Name)
 	d.Set("repository", privilege.Repository)
-	d.Set("type", privilege.Type)
+	d.Set("privilege_type", privilege.Type)
 	d.Set("pattern", privilege.Pattern)
 	d.Set("script_name", privilege.ScriptName)
 	return nil
