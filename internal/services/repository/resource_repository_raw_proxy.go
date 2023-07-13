@@ -83,9 +83,9 @@ func getRawProxyRepositoryFromResourceData(resourceData *schema.ResourceData) re
 		repo.RoutingRuleName = tools.GetStringPointer(routingRule.(string))
 	}
 
-	cleanupList := resourceData.Get("cleanup").([]interface{})
-	if len(cleanupList) > 0 && cleanupList[0] != nil {
-		cleanupConfig := cleanupList[0].(map[string]interface{})
+	cleanup, exists := resourceData.GetOk("cleanup")
+	if exists {
+		cleanupConfig := cleanup.([]interface{})[0].(map[string]interface{})
 		if len(cleanupConfig) > 0 {
 			policy_names, ok := cleanupConfig["policy_names"]
 			if ok {
