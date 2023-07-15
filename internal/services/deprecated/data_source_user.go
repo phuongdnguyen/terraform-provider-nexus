@@ -1,8 +1,8 @@
 package deprecated
 
 import (
-	"github.com/datadrivers/terraform-provider-nexus/internal/schema/common"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/nduyphuong/terraform-provider-nexus/internal/schema/common"
 )
 
 func DataSourceUser() *schema.Resource {

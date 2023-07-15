@@ -6,8 +6,8 @@ import (
 	nexus "github.com/nduyphuong/go-nexus-client/nexus3"
 	"github.com/nduyphuong/go-nexus-client/nexus3/schema/security"
 
-	"github.com/datadrivers/terraform-provider-nexus/internal/schema/common"
-	"github.com/datadrivers/terraform-provider-nexus/internal/tools"
+	"github.com/nduyphuong/terraform-provider-nexus/internal/schema/common"
+	"github.com/nduyphuong/terraform-provider-nexus/internal/tools"
 )
 
 func ResourceUser() *schema.Resource {

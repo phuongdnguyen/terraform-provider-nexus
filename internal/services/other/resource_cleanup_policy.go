@@ -2,10 +2,10 @@ package other
 
 import (
 	"fmt"
-	"github.com/datadrivers/terraform-provider-nexus/internal/schema/common"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	nexus "github.com/nduyphuong/go-nexus-client/nexus3"
 	nexusSchema "github.com/nduyphuong/go-nexus-client/nexus3/schema"
+	"github.com/nduyphuong/terraform-provider-nexus/internal/schema/common"
 )
 
 func ResourceCleanUpPolicy() *schema.Resource {
@@ -113,6 +113,7 @@ func GetPayload(name, format, notes string, lastDownloaded, lastBlobUpdated int)
 	}
 `, name, format, notes, lastDownloaded, lastBlobUpdated)
 }
+
 func NewCleanUpScript(name, format, notes string, criteria Criteria) nexusSchema.Script {
 	var content = `// Original from:
 // https://github.com/idealista/nexus-role/blob/master/files/scripts/cleanup_policy.groovy
@@ -232,24 +233,57 @@ def String toJsonString(cleanup_policy) {
 	}
 }
 
+func NewDeleteCleanUpScript(name string) nexusSchema.Script {
+	content := `
+import groovy.json.JsonSlurper
+import org.sonatype.nexus.cleanup.storage.CleanupPolicyStorage
+import org.sonatype.nexus.cleanup.storage.CleanupPolicyComponent
+
+
+parsed_args = new JsonSlurper().parseText(args)
+if (parsed_args.name == null) {
+    throw new Exception("Missing mandatory argument: name")
+}
+def deleteCleanupPolicy(String name) {
+    def cleanupPolicyStorage = container.lookup(CleanupPolicyStorage.class.getName())
+    def cleanupPolicyComponent = container.lookup(CleanupPolicyComponent.class.getName())
+    if (cleanupPolicyStorage.exists(name)) {
+        cleanupPolicyStorage.remove(cleanupPolicyStorage.get(name))
+    }
+}
+deleteCleanupPolicy(parsed_args.name)
+`
+	return nexusSchema.Script{
+		Name:    fmt.Sprintf("%s-delete", name),
+		Content: content,
+		Type:    "groovy",
+	}
+}
 func resourceCleanUpPolicyCreate(resourceData *schema.ResourceData, m interface{}) error {
 	client := m.(*nexus.NexusClient)
 	cu := getCleanUpPolicyFromResourceData(resourceData)
-	script := NewCleanUpScript(cu.Name, cu.Format, cu.Notes, cu.Criteria)
-	//create script
-	if err := client.Script.Create(&script); err != nil {
+	createScript := NewCleanUpScript(cu.Name, cu.Format, cu.Notes, cu.Criteria)
+	//creation script
+	if err := client.Script.Create(&createScript); err != nil {
 		return err
 	}
-	//	run script
-
+	//run creation script
 	payload := GetPayload(cu.Name, cu.Format, cu.Notes, cu.Criteria.LastDownloaded, cu.Criteria.LastBlobUpdated)
 	fmt.Printf("payload: %v", payload)
-	fmt.Printf("script: %v", script)
-	if err := client.Script.Run(script.Name, payload); err != nil {
+	fmt.Printf("script: %v", createScript)
+	if err := client.Script.Run(createScript.Name, payload); err != nil {
 		return err
 	}
+
+	//deletion script
+	deletionScript := NewDeleteCleanUpScript(cu.Name)
+	if err := client.Script.Create(&deletionScript); err != nil {
+		return err
+	}
+
 	//cleanup policy name is equal to script name
 	resourceData.SetId(cu.Name)
+
 	return resourceCleanUpPolicyRead(resourceData, m)
 }
 
@@ -293,13 +327,28 @@ func resourceCleanUpPolicyUpdate(resourceData *schema.ResourceData, m interface{
 	return resourceCleanUpPolicyRead(resourceData, m)
 }
 
+// cleanup policy will not be deleted since we create it using script api
 func resourceCleanUpPolicyDelete(resourceData *schema.ResourceData, m interface{}) error {
 	client := m.(*nexus.NexusClient)
-
+	//Delete creation script
 	if err := client.Script.Delete(resourceData.Id()); err != nil {
 		return err
 	}
-
+	//Run delete cleanup policy script
+	cu := getCleanUpPolicyFromResourceData(resourceData)
+	deletionScript := NewDeleteCleanUpScript(cu.Name)
+	deletionPayload := fmt.Sprintf(`
+	{
+		"name": "%s",
+	}
+`, cu.Name)
+	if err := client.Script.Run(deletionScript.Name, deletionPayload); err != nil {
+		return err
+	}
+	//Delete deletion script
+	if err := client.Script.Delete(deletionScript.Name); err != nil {
+		return err
+	}
 	resourceData.SetId("")
 	return nil
 }

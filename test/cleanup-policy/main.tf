@@ -14,12 +14,12 @@ provider "nexus" {
   username = "admin"
 }
 
-resource "nexus_cleanup_policy" "this" {
-  name   = "test"
+resource "nexus_cleanup_policy" "sample" {
+  name   = "sample"
   format = "docker"
   criteria {
-    last_downloaded = 180
-    last_blob_updated = 180
+    last_downloaded_days = 180
+    last_blob_updated_days = 180
     regex = "123"
   }
 }

@@ -4,12 +4,12 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/datadrivers/terraform-provider-nexus/internal/acceptance"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/acctest"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 	nexus "github.com/nduyphuong/go-nexus-client/nexus3"
 	"github.com/nduyphuong/go-nexus-client/nexus3/schema/security"
+	"github.com/nduyphuong/terraform-provider-nexus/internal/acceptance"
 )
 
 func TestAccResourceContentSelector(t *testing.T) {

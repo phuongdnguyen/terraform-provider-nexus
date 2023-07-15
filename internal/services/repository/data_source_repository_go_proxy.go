@@ -1,9 +1,9 @@
 package repository
 
 import (
-	"github.com/datadrivers/terraform-provider-nexus/internal/schema/common"
-	repositorySchema "github.com/datadrivers/terraform-provider-nexus/internal/schema/repository"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/nduyphuong/terraform-provider-nexus/internal/schema/common"
+	repositorySchema "github.com/nduyphuong/terraform-provider-nexus/internal/schema/repository"
 )
 
 func DataSourceRepositoryGoProxy() *schema.Resource {

@@ -1,10 +1,10 @@
 package other
 
 import (
-	"github.com/datadrivers/terraform-provider-nexus/internal/schema/common"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	nexus "github.com/nduyphuong/go-nexus-client/nexus3"
 	nexusSchema "github.com/nduyphuong/go-nexus-client/nexus3/schema"
+	"github.com/nduyphuong/terraform-provider-nexus/internal/schema/common"
 )
 
 func ResourceScript() *schema.Resource {
