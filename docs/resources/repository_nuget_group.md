@@ -89,16 +89,7 @@ resource "nexus_repository_nuget_group" "group" {
 
 Required:
 
-- `member_names` (Block Set, Min: 1) Member repositories names (see [below for nested schema](#nestedblock--group--member_names))
-
-<a id="nestedblock--group--member_names"></a>
-### Nested Schema for `group.member_names`
-
-Required:
-
-- `name` (String)
-- `order` (Number)
-
+- `member_names` (List of String) Member repositories names
 
 
 <a id="nestedblock--storage"></a>

@@ -11,24 +11,12 @@ var (
 			Schema: map[string]*schema.Schema{
 				"member_names": {
 					Description: "Member repositories names",
-					Elem: &schema.Resource{
-						Schema: map[string]*schema.Schema{
-							"order": &schema.Schema{
-								Type:     schema.TypeInt,
-								Required: true,
-							},
-							"name": &schema.Schema{
-								Type:     schema.TypeString,
-								Required: true,
-							},
-						},
+					Elem: &schema.Schema{
+						Type: schema.TypeString,
 					},
 					MinItems: 1,
 					Required: true,
-					// Set: func(v interface{}) int {
-					// 	return schema.HashString(strings.ToLower(v.(string)))
-					// },
-					Type: schema.TypeSet,
+					Type:     schema.TypeList,
 				},
 			},
 		},
@@ -42,21 +30,12 @@ var (
 			Schema: map[string]*schema.Schema{
 				"member_names": {
 					Description: "Member repositories names",
-					Elem: &schema.Resource{
-						Schema: map[string]*schema.Schema{
-							"order": &schema.Schema{
-								Type:     schema.TypeInt,
-								Required: true,
-							},
-							"name": &schema.Schema{
-								Type:     schema.TypeString,
-								Required: true,
-							},
-						},
+					Elem: &schema.Schema{
+						Type: schema.TypeString,
 					},
 					MinItems: 1,
 					Required: true,
-					Type:     schema.TypeSet,
+					Type:     schema.TypeList,
 				},
 				"writable_member": {
 					Description: "Pro-only: This field is for the Group Deployment feature available in NXRM Pro.",
@@ -75,20 +54,12 @@ var (
 			Schema: map[string]*schema.Schema{
 				"member_names": {
 					Description: "Member repositories names",
-					Elem: &schema.Resource{
-						Schema: map[string]*schema.Schema{
-							"order": {
-								Type:     schema.TypeInt,
-								Required: true,
-							},
-							"name": {
-								Type:     schema.TypeString,
-								Required: true,
-							},
-						},
+					Elem: &schema.Schema{
+						Type: schema.TypeString,
 					},
-					Computed: true,
-					Type:     schema.TypeSet,
+					MinItems: 1,
+					Required: true,
+					Type:     schema.TypeList,
 				},
 			},
 		},
@@ -101,20 +72,12 @@ var (
 			Schema: map[string]*schema.Schema{
 				"member_names": {
 					Description: "Member repositories names",
-					Elem: &schema.Resource{
-						Schema: map[string]*schema.Schema{
-							"order": {
-								Type:     schema.TypeInt,
-								Required: true,
-							},
-							"name": {
-								Type:     schema.TypeString,
-								Required: true,
-							},
-						},
+					Elem: &schema.Schema{
+						Type: schema.TypeString,
 					},
-					Computed: true,
-					Type:     schema.TypeSet,
+					MinItems: 1,
+					Required: true,
+					Type:     schema.TypeList,
 				},
 				"writable_member": {
 					Description: "Pro-only: This field is for the Group Deployment feature available in NXRM Pro.",

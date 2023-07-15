@@ -41,11 +41,10 @@ func ResourceRepositoryYumGroup() *schema.Resource {
 func getYumGroupRepositoryFromResourceData(resourceData *schema.ResourceData) repository.YumGroupRepository {
 	storageConfig := resourceData.Get("storage").([]interface{})[0].(map[string]interface{})
 	groupConfig := resourceData.Get("group").([]interface{})[0].(map[string]interface{})
-	groupMemberNames := []string{}
-	l := groupConfig["member_names"].(*schema.Set).List()
-	tools.SortSliceByKey(l, tools.SortKey)
-	for _, member := range l {
-		groupMemberNames = append(groupMemberNames, member.(map[string]interface{})["name"].(string))
+	groupMemberNamesInterface := groupConfig["member_names"].([]interface{})
+	groupMemberNames := make([]string, 0)
+	for _, v := range groupMemberNamesInterface {
+		groupMemberNames = append(groupMemberNames, v.(string))
 	}
 
 	repo := repository.YumGroupRepository{

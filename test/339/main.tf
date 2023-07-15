@@ -1,4 +1,12 @@
-# https://github.com/datadrivers/terraform-provider-nexus/issues/339
+terraform {
+  required_providers {
+    nexus = {
+      source  = "nduyphuong/nexus"
+      version = "1.23.0"
+    }
+  }
+}
+
 provider "nexus" {
   insecure = true
   password = "123123123"
@@ -6,237 +14,56 @@ provider "nexus" {
   username = "admin"
 }
 
-terraform {
-  required_version = ">= 0.14"
+resource "nexus_repository_bower_hosted" "internal" {
+  name   = "internal"
+  online = true
 
-  required_providers {
-    nexus = {
-      source = "datadrivers/nexus"
-    }
+  storage {
+    blob_store_name                = "default"
+    strict_content_type_validation = true
+    write_policy                   = "ALLOW"
   }
 }
 
-resource "nexus_repository_docker_hosted" "docker-hosted-repos-rfrg" {
-  name   = "docker-h-rfrg"
+resource "nexus_repository_bower_proxy" "bower_io" {
+  name   = "bower-io"
   online = true
-  docker {
-    force_basic_auth = false
-    v1_enabled       = false
-    https_port       = 5001
-  }
+
+  rewrite_package_urls = true
+
   storage {
-    blob_store_name                = "Default"
+    blob_store_name                = "default"
     strict_content_type_validation = true
   }
-}
 
-resource "nexus_repository_docker_hosted" "docker-hosted-repos-rint" {
-  name   = "docker-h-rint"
-  online = true
-  docker {
-    force_basic_auth = false
-    v1_enabled       = false
-    https_port       = 5002
+  proxy {
+    remote_url       = "https://registry.bower.io"
+    content_max_age  = 1440
+    metadata_max_age = 1440
   }
-  storage {
-    blob_store_name                = "Default"
-    strict_content_type_validation = true
-  }
-}
 
-resource "nexus_repository_docker_hosted" "docker-hosted-repos-rewt" {
-  name   = "docker-h-rewt"
-  online = true
-  docker {
-    force_basic_auth = false
-    v1_enabled       = false
-    https_port       = 5003
-  }
-  storage {
-    blob_store_name                = "Default"
-    strict_content_type_validation = true
+  negative_cache_enabled = true
+  negative_cache_ttl     = 1440
+
+  http_client {
+    blocked    = false
+    auto_block = true
   }
 }
 
-resource "nexus_repository_docker_group" "docker-group-repos" {
-  name   = "docker-g-rewt"
+resource "nexus_repository_bower_group" "group" {
+  name   = "bower-group"
   online = true
-  docker {
-    force_basic_auth = false
-    v1_enabled       = false
-  }
+
   group {
-    member_names {
-      name  = nexus_repository_docker_hosted.docker-hosted-repos-rfrg.name
-      order = "1"
-    }
-    member_names {
-      name  = nexus_repository_docker_hosted.docker-hosted-repos-rint.name
-      order = "2"
-    }
-    member_names {
-      name  = nexus_repository_docker_hosted.docker-hosted-repos-rewt.name
-      order = "3"
-    }
-
-    # member_names = [
-    #   {
-    #     name  = nexus_repository_docker_hosted.docker-hosted-repos-rewt.name,
-    #     order = "1"
-    #   },
-    #   {
-    #     name  = nexus_repository_docker_hosted.docker-hosted-repos-rint.name,
-    #     order = "2"
-    #   },
-    #   {
-    #     name  = nexus_repository_docker_hosted.docker-hosted-repos-rfrg.name,
-    #     order = "3"
-    #   },
-    # ]
-
-    # member_names = [
-    #   "docker-h-rewt",
-    #   "docker-h-rfrg",
-    #   "docker-h-rint",
-    # ]
+    member_names = [
+      nexus_repository_bower_hosted.internal.name,
+      nexus_repository_bower_proxy.bower_io.name,
+    ]
   }
+
   storage {
-    blob_store_name                = "Default"
-    strict_content_type_validation = true
-  }
-}
-
-resource "nexus_repository_docker_group" "docker-group-repos-1" {
-  name   = "docker-g-1"
-  online = true
-  docker {
-    force_basic_auth = false
-    v1_enabled       = false
-  }
-  group {
-    member_names {
-      name  = nexus_repository_docker_hosted.docker-hosted-repos-rfrg.name
-      order = "1"
-    }
-    member_names {
-      name  = nexus_repository_docker_hosted.docker-hosted-repos-rint.name
-      order = "2"
-    }
-    member_names {
-      name  = nexus_repository_docker_hosted.docker-hosted-repos-rewt.name
-      order = "3"
-    }
-  }
-  storage {
-    blob_store_name                = "Default"
-    strict_content_type_validation = true
-  }
-}
-
-resource "nexus_repository_docker_group" "docker-group-repos-2" {
-  name   = "docker-g-2"
-  online = true
-  docker {
-    force_basic_auth = false
-    v1_enabled       = false
-  }
-  group {
-    member_names {
-      name  = nexus_repository_docker_hosted.docker-hosted-repos-rfrg.name
-      order = "1"
-    }
-    member_names {
-      name  = nexus_repository_docker_hosted.docker-hosted-repos-rint.name
-      order = "2"
-    }
-    member_names {
-      name  = nexus_repository_docker_hosted.docker-hosted-repos-rewt.name
-      order = "3"
-    }
-  }
-  storage {
-    blob_store_name                = "Default"
-    strict_content_type_validation = true
-  }
-}
-
-resource "nexus_repository_docker_group" "docker-group-repos-3" {
-  name   = "docker-g-3"
-  online = true
-  docker {
-    force_basic_auth = false
-    v1_enabled       = false
-  }
-  group {
-    member_names {
-      name  = nexus_repository_docker_hosted.docker-hosted-repos-rfrg.name
-      order = "1"
-    }
-    member_names {
-      name  = nexus_repository_docker_hosted.docker-hosted-repos-rint.name
-      order = "2"
-    }
-    member_names {
-      name  = nexus_repository_docker_hosted.docker-hosted-repos-rewt.name
-      order = "3"
-    }
-  }
-  storage {
-    blob_store_name                = "Default"
-    strict_content_type_validation = true
-  }
-}
-
-resource "nexus_repository_docker_group" "docker-group-repos-4" {
-  name   = "docker-g-4"
-  online = true
-  docker {
-    force_basic_auth = false
-    v1_enabled       = false
-  }
-  group {
-    member_names {
-      name  = nexus_repository_docker_hosted.docker-hosted-repos-rfrg.name
-      order = "1"
-    }
-    member_names {
-      name  = nexus_repository_docker_hosted.docker-hosted-repos-rint.name
-      order = "2"
-    }
-    member_names {
-      name  = nexus_repository_docker_hosted.docker-hosted-repos-rewt.name
-      order = "3"
-    }
-  }
-  storage {
-    blob_store_name                = "Default"
-    strict_content_type_validation = true
-  }
-}
-
-resource "nexus_repository_docker_group" "docker-group-repos-5" {
-  name   = "docker-g-5"
-  online = true
-  docker {
-    force_basic_auth = false
-    v1_enabled       = false
-  }
-  group {
-    member_names {
-      name  = nexus_repository_docker_hosted.docker-hosted-repos-rfrg.name
-      order = "1"
-    }
-    member_names {
-      name  = nexus_repository_docker_hosted.docker-hosted-repos-rint.name
-      order = "2"
-    }
-    member_names {
-      name  = nexus_repository_docker_hosted.docker-hosted-repos-rewt.name
-      order = "3"
-    }
-  }
-  storage {
-    blob_store_name                = "Default"
+    blob_store_name                = "default"
     strict_content_type_validation = true
   }
 }

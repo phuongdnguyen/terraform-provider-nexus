@@ -42,12 +42,12 @@ func getDockerGroupRepositoryFromResourceData(resourceData *schema.ResourceData)
 	storageConfig := resourceData.Get("storage").([]interface{})[0].(map[string]interface{})
 	dockerConfig := resourceData.Get("docker").([]interface{})[0].(map[string]interface{})
 	groupConfig := resourceData.Get("group").([]interface{})[0].(map[string]interface{})
-	groupMemberNames := []string{}
-	l := groupConfig["member_names"].(*schema.Set).List()
-	tools.SortSliceByKey(l, tools.SortKey)
-	for _, member := range l {
-		groupMemberNames = append(groupMemberNames, member.(map[string]interface{})["name"].(string))
+	groupMemberNamesInterface := groupConfig["member_names"].([]interface{})
+	groupMemberNames := make([]string, 0)
+	for _, v := range groupMemberNamesInterface {
+		groupMemberNames = append(groupMemberNames, v.(string))
 	}
+
 	repo := repository.DockerGroupRepository{
 		Name:   resourceData.Get("name").(string),
 		Online: resourceData.Get("online").(bool),

@@ -6,7 +6,7 @@ provider_installation {
   # nexus provider plugin in the given directory.
   # relative path also works, but no variable or ~ evaluation
   dev_overrides {
-    "datadrivers/nexus" = "../../terraform.d/plugins/darwin_arm64/"
+    "nduyphuong/nexus" = "../../terraform.d/plugins/darwin_arm64/"
   }
 
   # For all other providers, install them directly from their origin provider
