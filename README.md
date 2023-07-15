@@ -19,15 +19,33 @@
 ## Introduction
 This repo is forked from https://github.com/datadrivers/terraform-provider-nexus.
 
-Terraform provider to configure Sonatype Nexus using its API.
+What's included:
+- Bug fixes:
+  - [provider crash when negative_cache block is not included](https://github.com/datadrivers/terraform-provider-nexus/issues/352)
+  - [order in repository group member is not respected](https://github.com/datadrivers/terraform-provider-nexus/issues/339)
+- Feature:
+  - support creating [cleanup policy](https://github.com/nduyphuong/terraform-provider-nexus/pull/5)
 
-Implemented and tested with Sonatype Nexus `3.40.0-03`.
+
+
+- Terraform provider to configure Sonatype Nexus using its API.
+
+Implemented and tested with Sonatype Nexus `3.43.0-01`.
 
 ## Usage
 
 ### Provider config
 
 ```hcl
+terraform {
+  required_version = ">= 0.14"
+
+  required_providers {
+    nexus = {
+      source = "nduyphuong/nexus"
+    }
+  }
+}
 provider "nexus" {
   insecure = true
   password = "admin123"
@@ -60,7 +78,7 @@ provider_installation {
   # nexus provider plugin in the given directory.
   # relative path also works, but no variable or ~ evaluation
   dev_overrides {
-    "datadrivers/nexus" = "../../"
+    nduyphuong/nexus = "../../"
   }
 
   # For all other providers, install them directly from their origin provider

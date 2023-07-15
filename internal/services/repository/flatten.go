@@ -1,9 +1,9 @@
 package repository
 
 import (
-	"github.com/datadrivers/go-nexus-client/nexus3/schema/repository"
-	"github.com/datadrivers/terraform-provider-nexus/internal/tools"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/nduyphuong/go-nexus-client/nexus3/schema/repository"
+	"github.com/nduyphuong/terraform-provider-nexus/internal/tools"
 )
 
 func flattenCleanup(cleanup *repository.Cleanup) []map[string]interface{} {

@@ -5,8 +5,8 @@ import (
 	"flag"
 	"log"
 
-	"github.com/datadrivers/terraform-provider-nexus/internal/provider"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/plugin"
+	"github.com/nduyphuong/terraform-provider-nexus/internal/provider"
 )
 
 // Generate docs for website
@@ -23,7 +23,7 @@ func main() {
 	log.SetFlags(log.Flags() &^ (log.Ldate | log.Ltime))
 
 	if debugMode {
-		err := plugin.Debug(context.Background(), "registry.terraform.io/datadrivers/nexus",
+		err := plugin.Debug(context.Background(), "registry.terraform.io/nduyphuong/nexus",
 			&plugin.ServeOpts{
 				ProviderFunc: provider.Provider,
 			})

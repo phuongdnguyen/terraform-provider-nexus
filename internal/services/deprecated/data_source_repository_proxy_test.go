@@ -3,8 +3,8 @@ package deprecated_test
 import (
 	"testing"
 
-	"github.com/datadrivers/terraform-provider-nexus/internal/acceptance"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/nduyphuong/terraform-provider-nexus/internal/acceptance"
 )
 
 func TestAccDataSourceRepositoryMavenProxy(t *testing.T) {

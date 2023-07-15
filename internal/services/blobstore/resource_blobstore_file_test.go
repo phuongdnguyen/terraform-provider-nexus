@@ -7,10 +7,10 @@ import (
 	"testing"
 	"text/template"
 
-	"github.com/datadrivers/go-nexus-client/nexus3/schema/blobstore"
-	"github.com/datadrivers/terraform-provider-nexus/internal/acceptance"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/acctest"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/nduyphuong/go-nexus-client/nexus3/schema/blobstore"
+	"github.com/nduyphuong/terraform-provider-nexus/internal/acceptance"
 )
 
 const (

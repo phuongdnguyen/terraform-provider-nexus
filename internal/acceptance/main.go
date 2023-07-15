@@ -6,8 +6,8 @@ import (
 	"testing"
 	"text/template"
 
-	"github.com/datadrivers/terraform-provider-nexus/internal/provider"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/nduyphuong/terraform-provider-nexus/internal/provider"
 )
 
 var (

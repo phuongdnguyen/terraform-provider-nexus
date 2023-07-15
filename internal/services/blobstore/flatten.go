@@ -1,8 +1,8 @@
 package blobstore
 
 import (
-	"github.com/datadrivers/go-nexus-client/nexus3/schema/blobstore"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/nduyphuong/go-nexus-client/nexus3/schema/blobstore"
 )
 
 func flattenSoftQuota(softQuota *blobstore.SoftQuota) []map[string]interface{} {

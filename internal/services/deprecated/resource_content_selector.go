@@ -1,9 +1,9 @@
 package deprecated
 
 import (
-	nexus "github.com/datadrivers/go-nexus-client/nexus3"
-	"github.com/datadrivers/go-nexus-client/nexus3/schema/security"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	nexus "github.com/nduyphuong/go-nexus-client/nexus3"
+	"github.com/nduyphuong/go-nexus-client/nexus3/schema/security"
 )
 
 func ResourceContentSelector() *schema.Resource {
