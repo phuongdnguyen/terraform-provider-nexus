@@ -1,7 +1,6 @@
 package repository
 
 import (
-	"github.com/datadrivers/terraform-provider-nexus/internal/tools"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -14,13 +13,13 @@ var (
 		Elem: &schema.Resource{
 			Schema: map[string]*schema.Schema{
 				"enabled": {
-					Default:     tools.NegativeCacheDefaultEnabled,
+					Default:     NegativeCacheDefaultEnabled,
 					Description: "Whether to cache responses for content not present in the proxied repository, defaults to `false` if unset",
 					Optional:    true,
 					Type:        schema.TypeBool,
 				},
 				"ttl": {
-					Default:     tools.NegativeCacheDefaultTTL,
+					Default:     NegativeCacheDefaultTTL,
 					Description: "How long to cache the fact that a file was not found in the repository (in minutes), defaults is `1440` if unset",
 					Optional:    true,
 					Type:        schema.TypeInt,
@@ -32,13 +31,13 @@ var (
 		Description: "Configuration of the negative cache handling, defaults to `false` if unset",
 		Optional:    true,
 		Type:        schema.TypeBool,
-		Default:     tools.NegativeCacheDefaultEnabled,
+		Default:     NegativeCacheDefaultEnabled,
 	}
 	ResourceNegativeCacheTTL = &schema.Schema{
 		Description: "Configuration of the negative cache handling, defaults is `1440` if unset",
 		Optional:    true,
 		Type:        schema.TypeInt,
-		Default:     tools.NegativeCacheDefaultTTL,
+		Default:     NegativeCacheDefaultTTL,
 	}
 	DataSourceNegativeCache = &schema.Schema{
 		Description: "Configuration of the negative cache handling",
