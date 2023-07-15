@@ -1,10 +1,10 @@
 package deprecated
 
 import (
-	nexus "github.com/datadrivers/go-nexus-client/nexus3"
-	"github.com/datadrivers/go-nexus-client/nexus3/schema/security"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
+	nexus "github.com/nduyphuong/go-nexus-client/nexus3"
+	"github.com/nduyphuong/go-nexus-client/nexus3/schema/security"
 
 	"github.com/datadrivers/terraform-provider-nexus/internal/schema/common"
 	"github.com/datadrivers/terraform-provider-nexus/internal/tools"

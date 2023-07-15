@@ -1,10 +1,10 @@
 package other
 
 import (
-	nexus "github.com/datadrivers/go-nexus-client/nexus3"
-	nexusSchema "github.com/datadrivers/go-nexus-client/nexus3/schema"
 	"github.com/datadrivers/terraform-provider-nexus/internal/schema/common"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	nexus "github.com/nduyphuong/go-nexus-client/nexus3"
+	nexusSchema "github.com/nduyphuong/go-nexus-client/nexus3/schema"
 )
 
 func ResourceScript() *schema.Resource {
@@ -58,7 +58,7 @@ func resourceScriptCreate(d *schema.ResourceData, m interface{}) error {
 		return err
 	}
 	// TODO: It should be possible to configure whether to run script or not
-	if err := client.Script.Run(script.Name); err != nil {
+	if err := client.Script.Run(script.Name, ""); err != nil {
 		return err
 	}
 
@@ -95,7 +95,7 @@ func resourceScriptUpdate(d *schema.ResourceData, m interface{}) error {
 			return err
 		}
 
-		if err := client.Script.Run(script.Name); err != nil {
+		if err := client.Script.Run(script.Name, ""); err != nil {
 			return err
 		}
 	}

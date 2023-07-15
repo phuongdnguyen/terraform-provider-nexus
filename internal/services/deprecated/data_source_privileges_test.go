@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/datadrivers/go-nexus-client/nexus3/schema/security"
 	"github.com/datadrivers/terraform-provider-nexus/internal/acceptance"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/nduyphuong/go-nexus-client/nexus3/schema/security"
 )
 
 func TestAccDataSourcePrivileges(t *testing.T) {

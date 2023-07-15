@@ -3,12 +3,12 @@ package other
 import (
 	"strings"
 
-	nexus "github.com/datadrivers/go-nexus-client/nexus3"
-	nexusSchema "github.com/datadrivers/go-nexus-client/nexus3/schema"
 	"github.com/datadrivers/terraform-provider-nexus/internal/schema/common"
 	"github.com/datadrivers/terraform-provider-nexus/internal/tools"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
+	nexus "github.com/nduyphuong/go-nexus-client/nexus3"
+	nexusSchema "github.com/nduyphuong/go-nexus-client/nexus3/schema"
 )
 
 func ResourceRoutingRule() *schema.Resource {

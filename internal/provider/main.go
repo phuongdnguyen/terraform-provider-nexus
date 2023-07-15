@@ -1,14 +1,14 @@
 package provider
 
 import (
-	nexus "github.com/datadrivers/go-nexus-client/nexus3"
-	"github.com/datadrivers/go-nexus-client/nexus3/pkg/client"
 	"github.com/datadrivers/terraform-provider-nexus/internal/services/blobstore"
 	"github.com/datadrivers/terraform-provider-nexus/internal/services/deprecated"
 	"github.com/datadrivers/terraform-provider-nexus/internal/services/other"
 	"github.com/datadrivers/terraform-provider-nexus/internal/services/repository"
 	"github.com/datadrivers/terraform-provider-nexus/internal/services/security"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	nexus "github.com/nduyphuong/go-nexus-client/nexus3"
+	"github.com/nduyphuong/go-nexus-client/nexus3/pkg/client"
 )
 
 // Provider returns a terraform.Provider

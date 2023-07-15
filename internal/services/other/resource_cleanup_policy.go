@@ -1,9 +1,11 @@
 package other
 
 import (
-	nexus "github.com/datadrivers/go-nexus-client/nexus3"
+	"fmt"
 	"github.com/datadrivers/terraform-provider-nexus/internal/schema/common"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	nexus "github.com/nduyphuong/go-nexus-client/nexus3"
+	nexusSchema "github.com/nduyphuong/go-nexus-client/nexus3/schema"
 )
 
 func ResourceCleanUpPolicy() *schema.Resource {
@@ -45,14 +47,21 @@ func ResourceCleanUpPolicy() *schema.Resource {
 				MaxItems:    1,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
-						"last_downloaded": {
-							Type: schema.TypeInt,
+						"last_downloaded_days": {
+							Type:        schema.TypeInt,
+							Required:    true,
+							Description: "Remove components that were published over this amount of time",
 						},
-						"last_blob_updated": {
-							Type: schema.TypeInt,
+						"last_blob_updated_days": {
+							Type:        schema.TypeInt,
+							Required:    true,
+							Description: "Remove components that haven't been downloaded in this amount of time",
 						},
 						"regex": {
-							Type: schema.TypeString,
+							Type:     schema.TypeString,
+							Required: true,
+							Description: "Remove components that have at least one asset name matching the following" +
+								" regular expression pattern",
 						},
 					},
 				},
@@ -69,9 +78,9 @@ type CleanUpPolicy struct {
 }
 
 type Criteria struct {
-	Last_downloaded   int
-	Last_blob_updated int
-	Regex             string
+	LastDownloaded  int
+	LastBlobUpdated int
+	Regex           string
 }
 
 func getCleanUpPolicyFromResourceData(d *schema.ResourceData) CleanUpPolicy {
@@ -84,15 +93,28 @@ func getCleanUpPolicyFromResourceData(d *schema.ResourceData) CleanUpPolicy {
 		rList := d.Get("criteria").([]interface{})
 		rConfig := rList[0].(map[string]interface{})
 		c.Criteria = Criteria{
-			Last_downloaded:   rConfig["last_downloaded"].(int),
-			Last_blob_updated: rConfig["last_blob_updated"].(int),
-			Regex:             rConfig["regex"].(string),
+			LastDownloaded:  rConfig["last_downloaded_days"].(int),
+			LastBlobUpdated: rConfig["last_blob_updated_days"].(int),
+			Regex:           rConfig["regex"].(string),
 		}
 	}
 	return c
 }
 
-var script = `// Original from:
+func GetPayload(name, format, notes string, lastDownloaded, lastBlobUpdated int) string {
+	return fmt.Sprintf(`
+	{     "name":"%s",
+		  "format":"%s",
+		  "notes":"%s",
+	      "criteria": {
+          "lastBlobUpdated": %v,
+          "lastDownloaded": %v
+          }
+	}
+`, name, format, notes, lastDownloaded, lastBlobUpdated)
+}
+func NewCleanUpScript(name, format, notes string, criteria Criteria) nexusSchema.Script {
+	var content = `// Original from:
 // https://github.com/idealista/nexus-role/blob/master/files/scripts/cleanup_policy.groovy
 import com.google.common.collect.Maps
 import groovy.json.JsonSlurper
@@ -203,25 +225,88 @@ def String toJsonString(cleanup_policy) {
     return policyString.toPrettyString()
 }
 `
+	return nexusSchema.Script{
+		Name:    name,
+		Content: content,
+		Type:    "groovy",
+	}
+}
 
 func resourceCleanUpPolicyCreate(resourceData *schema.ResourceData, m interface{}) error {
-	nexusClient := m.(*nexus.NexusClient)
+	client := m.(*nexus.NexusClient)
 	cu := getCleanUpPolicyFromResourceData(resourceData)
+	script := NewCleanUpScript(cu.Name, cu.Format, cu.Notes, cu.Criteria)
+	//create script
+	if err := client.Script.Create(&script); err != nil {
+		return err
+	}
+	//	run script
 
+	payload := GetPayload(cu.Name, cu.Format, cu.Notes, cu.Criteria.LastDownloaded, cu.Criteria.LastBlobUpdated)
+	fmt.Printf("payload: %v", payload)
+	fmt.Printf("script: %v", script)
+	if err := client.Script.Run(script.Name, payload); err != nil {
+		return err
+	}
+	//cleanup policy name is equal to script name
+	resourceData.SetId(cu.Name)
+	return resourceCleanUpPolicyRead(resourceData, m)
 }
 
 func resourceCleanUpPolicyRead(resourceData *schema.ResourceData, m interface{}) error {
+	client := m.(*nexus.NexusClient)
 
+	script, err := client.Script.Get(resourceData.Id())
+	if err != nil {
+		return err
+	}
+
+	if script == nil {
+		resourceData.SetId("")
+		return nil
+	}
+	/**Instead of set data from what we get from nexus
+	We set data to what are provided in resource data
+	**/
+	resourceData.Set("name", script.Name)
+	cu := getCleanUpPolicyFromResourceData(resourceData)
+	resourceData.Set("format", cu.Format)
+	resourceData.Set("notes", cu.Notes)
+	resourceData.Set("criteria", flattenCriteria(&cu.Criteria))
+	return nil
 }
 
 func resourceCleanUpPolicyUpdate(resourceData *schema.ResourceData, m interface{}) error {
-
+	client := m.(*nexus.NexusClient)
+	// if name is changed, resource is force to recreate already
+	if resourceData.HasChangeExcept("name") {
+		cu := getCleanUpPolicyFromResourceData(resourceData)
+		script := NewCleanUpScript(cu.Name, cu.Format, cu.Notes, cu.Criteria)
+		if err := client.Script.Update(&script); err != nil {
+			return err
+		}
+		payload := GetPayload(cu.Name, cu.Format, cu.Notes, cu.Criteria.LastDownloaded, cu.Criteria.LastBlobUpdated)
+		if err := client.Script.Run(cu.Name, payload); err != nil {
+			return err
+		}
+	}
+	return resourceCleanUpPolicyRead(resourceData, m)
 }
 
 func resourceCleanUpPolicyDelete(resourceData *schema.ResourceData, m interface{}) error {
+	client := m.(*nexus.NexusClient)
 
+	if err := client.Script.Delete(resourceData.Id()); err != nil {
+		return err
+	}
+
+	resourceData.SetId("")
+	return nil
 }
 
 func resourceCleanUpPolicyExists(resourceData *schema.ResourceData, m interface{}) (bool, error) {
+	client := m.(*nexus.NexusClient)
 
+	script, err := client.Script.Get(resourceData.Id())
+	return script != nil, err
 }
