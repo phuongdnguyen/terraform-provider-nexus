@@ -58,38 +58,16 @@ func flattenComponent(component *repository.Component) []map[string]interface{} 
 
 func flattenGroup(group *repository.Group) []map[string]interface{} {
 	data := map[string]interface{}{}
-
-	ois := make([]interface{}, len(group.MemberNames))
-
-	for i, memberName := range group.MemberNames {
-		oi := make(map[string]interface{})
-
-		oi["name"] = memberName
-		// array index to human-friendly order
-		oi["order"] = i + 1
-		ois[i] = oi
-	}
-
+	data["member_names"] = group.MemberNames
 	return []map[string]interface{}{data}
 }
 
 func flattenGroupDeploy(group *repository.GroupDeploy) []map[string]interface{} {
 	data := map[string]interface{}{}
-
-	ois := make([]interface{}, len(group.MemberNames))
-
-	for i, memberName := range group.MemberNames {
-		oi := make(map[string]interface{})
-
-		oi["name"] = memberName
-		// array index to human-friendly order
-		oi["order"] = i + 1
-		ois[i] = oi
-	}
+	data["member_names"] = group.MemberNames
 	if group.WritableMember != nil {
 		data["writable_member"] = *group.WritableMember
 	}
-	data["member_names"] = ois
 	return []map[string]interface{}{data}
 }
 

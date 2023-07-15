@@ -31,17 +31,8 @@ data "nexus_repository_pypi_group" "group" {
 
 Read-Only:
 
-- `member_names` (Set of Object) (see [below for nested schema](#nestedobjatt--group--member_names))
+- `member_names` (List of String)
 - `writable_member` (String)
-
-<a id="nestedobjatt--group--member_names"></a>
-### Nested Schema for `group.member_names`
-
-Read-Only:
-
-- `name` (String)
-- `order` (Number)
-
 
 
 <a id="nestedatt--storage"></a>
