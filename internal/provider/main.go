@@ -130,6 +130,7 @@ func Provider() *schema.Provider {
 			"nexus_role":                       deprecated.ResourceRole(),
 			"nexus_routing_rule":               other.ResourceRoutingRule(),
 			"nexus_script":                     other.ResourceScript(),
+			"nexus_cleanup_policy":             other.ResourceCleanUpPolicy(),
 			"nexus_security_anonymous":         security.ResourceSecurityAnonymous(),
 			"nexus_security_content_selector":  security.ResourceSecurityContentSelector(),
 			"nexus_security_ldap":              security.ResourceSecurityLDAP(),
