@@ -518,8 +518,8 @@ github.com/nakabonne/nestif v0.3.1 h1:wm28nZjhQY5HyYPx+weN3Q65k6ilSBxDb8v5S81B81
 github.com/nakabonne/nestif v0.3.1/go.mod h1:9EtoZochLn5iUprVDmDjqGKPofoUEBL8U4Ngq6aY7OE=
 github.com/nbutton23/zxcvbn-go v0.0.0-20210217022336-fa2cb2858354 h1:4kuARK6Y6FxaNu/BnU2OAaLF86eTVhP2hjTB6iMvItA=
 github.com/nbutton23/zxcvbn-go v0.0.0-20210217022336-fa2cb2858354/go.mod h1:KSVJerMDfblTH7p5MZaTt+8zaT2iEk3AkVb9PQdZuE8=
-github.com/nduyphuong/go-nexus-client v0.0.0-20230715104958-056dbc347076 h1:aiMoIrkL7ZJpX6meW1+CBLNwjQsI47zT7FHwFmqoIps=
-github.com/nduyphuong/go-nexus-client v0.0.0-20230715104958-056dbc347076/go.mod h1:r0ct4lj+8ZY23ESVia6CQNHokRaB2RXbACT4MypRYgc=
+github.com/nduyphuong/go-nexus-client v1.5.3 h1:PsJI6W9RCXT1zrW6KwGjMll7UkCIByuwNyeVEPPQggQ=
+github.com/nduyphuong/go-nexus-client v1.5.3/go.mod h1:r0ct4lj+8ZY23ESVia6CQNHokRaB2RXbACT4MypRYgc=
 github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e/go.mod h1:zD1mROLANZcx1PVRCS0qkT7pwLkGfwJo4zjcN/Tysno=
 github.com/nishanths/exhaustive v0.8.3 h1:pw5O09vwg8ZaditDp/nQRqVnrMczSJDxRDJMowvhsrM=
 github.com/nishanths/exhaustive v0.8.3/go.mod h1:qj+zJJUgJ76tR92+25+03oYUhzF4R7/2Wk7fGTfCHmg=
