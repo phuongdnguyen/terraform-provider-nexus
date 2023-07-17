@@ -1,6 +1,7 @@
 package other
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	nexus "github.com/nduyphuong/go-nexus-client/nexus3"
@@ -43,7 +44,7 @@ func ResourceCleanUpPolicy() *schema.Resource {
 			"criteria": {
 				Description: "Cleanup criteria",
 				Type:        schema.TypeList,
-				Required:    true,
+				Optional:    true,
 				MaxItems:    1,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -71,16 +72,16 @@ func ResourceCleanUpPolicy() *schema.Resource {
 }
 
 type CleanUpPolicy struct {
-	Name     string
-	Format   string
-	Notes    string
-	Criteria Criteria
+	Name     string   `json:"name"`
+	Format   string   `json:"format"`
+	Notes    string   `json:"notes"`
+	Criteria Criteria `json:"criteria"`
 }
 
 type Criteria struct {
-	LastDownloaded  int
-	LastBlobUpdated int
-	Regex           string
+	LastDownloaded  int    `json:"lastDownloaded"`
+	LastBlobUpdated int    `json:"lastBlobUpdated"`
+	Regex           string `json:"regex"`
 }
 
 func getCleanUpPolicyFromResourceData(d *schema.ResourceData) CleanUpPolicy {
@@ -101,20 +102,12 @@ func getCleanUpPolicyFromResourceData(d *schema.ResourceData) CleanUpPolicy {
 	return c
 }
 
-func GetPayload(name, format, notes string, lastDownloaded, lastBlobUpdated int) string {
-	return fmt.Sprintf(`
-	{     "name":"%s",
-		  "format":"%s",
-		  "notes":"%s",
-	      "criteria": {
-          "lastBlobUpdated": %v,
-          "lastDownloaded": %v
-          }
-	}
-`, name, format, notes, lastDownloaded, lastBlobUpdated)
+func GetCreationPayLoad(cu *CleanUpPolicy) string {
+	r, _ := json.Marshal(cu)
+	return string(r)
 }
 
-func NewCleanUpScript(name, format, notes string, criteria Criteria) nexusSchema.Script {
+func NewCleanUpScript(name string) nexusSchema.Script {
 	var content = `// Original from:
 // https://github.com/idealista/nexus-role/blob/master/files/scripts/cleanup_policy.groovy
 import com.google.common.collect.Maps
@@ -126,6 +119,7 @@ import org.sonatype.nexus.cleanup.storage.CleanupPolicyStorage
 import static org.sonatype.nexus.repository.search.DefaultComponentMetadataProducer.IS_PRERELEASE_KEY
 import static org.sonatype.nexus.repository.search.DefaultComponentMetadataProducer.LAST_BLOB_UPDATED_KEY
 import static org.sonatype.nexus.repository.search.DefaultComponentMetadataProducer.LAST_DOWNLOADED_KEY
+import static org.sonatype.nexus.repository.search.DefaultComponentMetadataProducer.REGEX_KEY
 
 
 def cleanupPolicyStorage = container.lookup(CleanupPolicyStorage.class.getName())
@@ -199,6 +193,11 @@ def Map<String, String> createCriteria(parsed_args) {
     } else {
         criteriaMap.put(LAST_DOWNLOADED_KEY, asStringSeconds(parsed_args.criteria.lastDownloaded))
     }
+    if (parsed_args.criteria.regex == null) {
+        criteriaMap.remove(REGEX_KEY)
+    } else {
+        criteriaMap.put(REGEX_KEY, parsed_args.criteria.regex)
+    }
     log.debug("Using criteriaMap: ${criteriaMap}")
 
     return criteriaMap
@@ -262,20 +261,19 @@ deleteCleanupPolicy(parsed_args.name)
 func resourceCleanUpPolicyCreate(resourceData *schema.ResourceData, m interface{}) error {
 	client := m.(*nexus.NexusClient)
 	cu := getCleanUpPolicyFromResourceData(resourceData)
-	createScript := NewCleanUpScript(cu.Name, cu.Format, cu.Notes, cu.Criteria)
+	createScript := NewCleanUpScript(cu.Name)
 	//creation script
 	if err := client.Script.Create(&createScript); err != nil {
 		return err
 	}
 	//run creation script
-	payload := GetPayload(cu.Name, cu.Format, cu.Notes, cu.Criteria.LastDownloaded, cu.Criteria.LastBlobUpdated)
+	payload := GetCreationPayLoad(&cu)
 	fmt.Printf("payload: %v", payload)
-	fmt.Printf("script: %v", createScript)
 	if err := client.Script.Run(createScript.Name, payload); err != nil {
 		return err
 	}
 
-	//deletion script
+	//create deletion script
 	deletionScript := NewDeleteCleanUpScript(cu.Name)
 	if err := client.Script.Create(&deletionScript); err != nil {
 		return err
@@ -315,11 +313,11 @@ func resourceCleanUpPolicyUpdate(resourceData *schema.ResourceData, m interface{
 	// if name is changed, resource is force to recreate already
 	if resourceData.HasChangeExcept("name") {
 		cu := getCleanUpPolicyFromResourceData(resourceData)
-		script := NewCleanUpScript(cu.Name, cu.Format, cu.Notes, cu.Criteria)
+		script := NewCleanUpScript(cu.Name)
 		if err := client.Script.Update(&script); err != nil {
 			return err
 		}
-		payload := GetPayload(cu.Name, cu.Format, cu.Notes, cu.Criteria.LastDownloaded, cu.Criteria.LastBlobUpdated)
+		payload := GetCreationPayLoad(&cu)
 		if err := client.Script.Run(cu.Name, payload); err != nil {
 			return err
 		}
@@ -327,7 +325,7 @@ func resourceCleanUpPolicyUpdate(resourceData *schema.ResourceData, m interface{
 	return resourceCleanUpPolicyRead(resourceData, m)
 }
 
-// cleanup policy will not be deleted since we create it using script api
+// there is no api for cleanup policy, so we delete it with also a script
 func resourceCleanUpPolicyDelete(resourceData *schema.ResourceData, m interface{}) error {
 	client := m.(*nexus.NexusClient)
 	//Delete creation script

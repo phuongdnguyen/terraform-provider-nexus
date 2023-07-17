@@ -12,12 +12,12 @@ Use this resource to create a Nexus Cleanup Policy Rule.
 
 ### Required
 
-- `criteria` (Block List, Min: 1, Max: 1) Cleanup criteria (see [below for nested schema](#nestedblock--criteria))
 - `format` (String) The format that this cleanup policy can be applied to
 - `name` (String) The name of the cleanup policy rule
 
 ### Optional
 
+- `criteria` (Block List, Max: 1) Cleanup criteria (see [below for nested schema](#nestedblock--criteria))
 - `notes` (String) Notes for this policy
 
 ### Read-Only

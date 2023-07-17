@@ -20,6 +20,6 @@ resource "nexus_cleanup_policy" "sample" {
   criteria {
     last_downloaded_days = 180
     last_blob_updated_days = 180
-    regex = "123"
+    regex = "^test"
   }
 }
